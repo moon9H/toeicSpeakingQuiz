@@ -1,0 +1,302 @@
+[
+  {
+    "no": 1,
+    "category": "스트레스",
+    "korean": "이 것은 나의 스트레스를 풀어 준다. 나는 요즘 스트레스를 많이 받았다. 그래서 이것이 필요하다.",
+    "english": "It relieves my stress. I'm stressed out these days. So, I need this."
+  },
+  {
+    "no": 2,
+    "category": "돈 절약",
+    "korean": "이 것은 더 싸서 돈을 절약 할 수 있다.",
+    "english": "It's cheaper, so I can save money."
+  },
+  {
+    "no": 3,
+    "category": "가격",
+    "korean": "가격이 저렴하다.",
+    "english": "The price is reasonable."
+  },
+  {
+    "no": 4,
+    "category": "시간 절약",
+    "korean": "이 것은 더 빨라서 시간을 절약 할 수 있다.",
+    "english": "It's faster, so I can save time."
+  },
+  {
+    "no": 5,
+    "category": "유용한 정보1",
+    "korean": "나는 친구들에게 많은 유용한 정보를 얻을 수 있다.",
+    "english": "I can get a lot of useful information from my friends."
+  },
+  {
+    "no": 6,
+    "category": "유용한 정보2",
+    "korean": "나는 책에서 많은 유용한 정보를 얻을 수 있다.",
+    "english": "I can get a lot of useful information from books."
+  },
+  {
+    "no": 7,
+    "category": "유용한 정보3",
+    "korean": "나는 인터넷에서 많은 유용한 정보를 얻을 수 있다.",
+    "english": "I can get a lot of useful information on the Internet."
+  },
+  {
+    "no": 8,
+    "category": "믿을 만한 정보",
+    "korean": "이 것은 더 믿을 만 해서 정보가 더 신뢰가 간다.",
+    "english": "It's more reliable, so the information is more trustworthy."
+  },
+  {
+    "no": 9,
+    "category": "언제 어디서나",
+    "korean": "나는 정보를 언제 어디서나 내 스마트 폰으로 얻을 수 있다.",
+    "english": "I can get information anytime anywhere on my smartphone."
+  },
+  {
+    "no": 10,
+    "category": "대면 장점1",
+    "korean": "이 것은 더 개인적이고 더 밀접한 인간관계를 쌓을 수 있다.",
+    "english": "It is more personal, and builds a closer relationship."
+  },
+  {
+    "no": 11,
+    "category": "대면장점2",
+    "korean": "이 것은 오해를 덜 불러 일으킨다.",
+    "english": "It causes less misunderstanding."
+  },
+  {
+    "no": 12,
+    "category": "좋아하는 일",
+    "korean": "이 것은 내가 가장 좋아하는 일이다.",
+    "english": "It's my favorite thing to do."
+  },
+  {
+    "no": 13,
+    "category": "행복",
+    "korean": "이 것은 나를 행복하게 해주고, 나는 걱정 근심을 잊을 수 있다.",
+    "english": "It makes me happy, and I can forget about my worries."
+  },
+  {
+    "no": 14,
+    "category": "좋은 시설",
+    "korean": "이 것은 좋은 시설을 가지고 있다.",
+    "english": "It has great facilities."
+  },
+  {
+    "no": 15,
+    "category": "핫플레이스",
+    "korean": "이 곳은 인기 있는 곳이라, 사람들이 좋아한다.",
+    "english": "It's a well-liked place so people love it."
+  },
+  {
+    "no": 16,
+    "category": "예산 부족1",
+    "korean": "나는 학생이라 예산이 빠듯하다.",
+    "english": "I'm a student so my budget is tight."
+  },
+  {
+    "no": 17,
+    "category": "예산 부족2",
+    "korean": "나는 비싼 것을 살 여유가 없다.",
+    "english": "I can't afford to buy expensive things."
+  },
+  {
+    "no": 18,
+    "category": "돈 낭비1",
+    "korean": "나는 그것에 지나치게 많은 돈을 쓰고 싶지 않다.",
+    "english": "I don't want to waste too much money on that."
+  },
+  {
+    "no": 19,
+    "category": "돈 낭비2",
+    "korean": "이 것은 돈 낭비다.",
+    "english": "It's a waste of money."
+  },
+  {
+    "no": 20,
+    "category": "시간 부족1",
+    "korean": "나는 학생이다 그래서 학업에 바쁘다.",
+    "english": "I'm a student and I'm so busy with my school work."
+  },
+  {
+    "no": 21,
+    "category": "시간 부족2",
+    "korean": "나는 시간이 많이 없다.",
+    "english": "I don't have much time."
+  },
+  {
+    "no": 22,
+    "category": "시간 부족3",
+    "korean": "나는 그것에 지나치게 많은 시간을 낭비하기 싫다.",
+    "english": "I don't want to waste too much time on that."
+  },
+  {
+    "no": 23,
+    "category": "시간낭비",
+    "korean": "이 것은 시간 낭비다.",
+    "english": "It's a waste of time."
+  },
+  {
+    "no": 24,
+    "category": "재미",
+    "korean": "이 것은 더 재밌고 즐거움을 주는 일이다. 그래서 나는 지루해지지 않는다.",
+    "english": "It's more fun and entertaining, so I don't get bored."
+  },
+  {
+    "no": 25,
+    "category": "같이1",
+    "korean": "나는 같이 하는 것이 더 재미있다고 생각한다.",
+    "english": "I think it's more fun to do things in a group."
+  },
+  {
+    "no": 26,
+    "category": "같이2",
+    "korean": "나는 새로운 사람을 만날 수 있고 친구를 만들 수 있다.",
+    "english": "I can meet new people and make friends."
+  },
+  {
+    "no": 27,
+    "category": "혼자1",
+    "korean": "나는 더 편안함을 느끼고 더 잘 집중 할 수 있다.",
+    "english": "I feel more comfortable and I can focus better."
+  },
+  {
+    "no": 28,
+    "category": "혼자2",
+    "korean": "나는 다른 사람들을 기다리느라 시간을 낭비 할 필요가 없다.",
+    "english": "I don't have to waste time waiting for other people."
+  },
+  {
+    "no": 29,
+    "category": "집1",
+    "korean": "나는 집에서 더 편안함을 느낀다.",
+    "english": "I feel more comfortable at home."
+  },
+  {
+    "no": 30,
+    "category": "집2",
+    "korean": "나는 시간을 절약 할 수 있다 왜냐하면 나는 밖에 나가느라 시간을 낭비 할 필요가 없기 때문이다.",
+    "english": "I can save time because I don't have to waste time going out."
+  },
+  {
+    "no": 31,
+    "category": "새로운 것1",
+    "korean": "그 것들은 너무 오래 되어서 새로운 것이 생기면 좋을 것 같다.",
+    "english": "They are too old so I think it's good to have new ones."
+  },
+  {
+    "no": 32,
+    "category": "새로운 것2",
+    "korean": "그 것들은 너무 구식이어서 새로운 것이 있으면 더 나을 것 같다.",
+    "english": "They are too outdated so I think it's good to have new ones."
+  },
+  {
+    "no": 33,
+    "category": "새로운 것3",
+    "korean": "여기에 더 많은 가게가 있다면, 더 편리할 것이다.",
+    "english": "If we have more stores here, it would be more convenient."
+  },
+  {
+    "no": 34,
+    "category": "필요1",
+    "korean": "이 것은 나에게 매우 필요 한 것이다.",
+    "english": "It's very necessary for me."
+  },
+  {
+    "no": 35,
+    "category": "필요2",
+    "korean": "나는 그 것을 자주 이용한다.",
+    "english": "I frequently use it."
+  },
+  {
+    "no": 36,
+    "category": "좋은 경험1",
+    "korean": "이 것은 나를 행복하게 해주고, 나는 좋은 경험을 할 수 있다.",
+    "english": "It makes me happy and I can have a great experience."
+  },
+  {
+    "no": 37,
+    "category": "좋은 경험2",
+    "korean": "그들은 행복한 분위기와 기분 좋은 경험을 제공한다.",
+    "english": "They provide a happy environment and a pleasant experience."
+  },
+  {
+    "no": 38,
+    "category": "믿을 만한 제품",
+    "korean": "이 것은 더 믿을 만 해서 나는 그 제품을 신뢰 할 수 있다.",
+    "english": "It's more reliable and I can trust the product."
+  },
+  {
+    "no": 39,
+    "category": "인기있는 것",
+    "korean": "이 것은 인기있는 아이템인지라 사람들이 좋아 할 것이다.",
+    "english": "It's a popular item so people will love it."
+  },
+  {
+    "no": 40,
+    "category": "선물1",
+    "korean": "이 것은 의미가 깊다.",
+    "english": "It has sentimental value."
+  },
+  {
+    "no": 41,
+    "category": "도전",
+    "korean": "나는 새로운 것을 시도 해 보는 것을 좋아한다.",
+    "english": "I like to try new things."
+  },
+  {
+    "no": 42,
+    "category": "선물2",
+    "korean": "이 것은 좋은 선물이다.",
+    "english": "It's a good gift."
+  },
+  {
+    "no": 43,
+    "category": "루틴1",
+    "korean": "이 것은 내 일상의 일부이다.",
+    "english": "It's part of my routine."
+  },
+  {
+    "no": 44,
+    "category": "루틴2",
+    "korean": "이 것은 내 습관이다.",
+    "english": "It's my habit."
+  },
+  {
+    "no": 45,
+    "category": "좋아한다1",
+    "korean": "난 그 것이 정말 좋았었다.",
+    "english": "I really liked it."
+  },
+  {
+    "no": 46,
+    "category": "좋아한다2",
+    "korean": "그 것은 훌륭했다.",
+    "english": "It was great."
+  },
+  {
+    "no": 47,
+    "category": "좋아한다3",
+    "korean": "그 것은 매우 근사했다.",
+    "english": "It was awesome."
+  },
+  {
+    "no": 48,
+    "category": "장점1",
+    "korean": "이 것은 더 싸고 빠르다.",
+    "english": "It's cheaper and faster."
+  },
+  {
+    "no": 49,
+    "category": "장점2",
+    "korean": "이 것은 매우 편리하고 유용하다.",
+    "english": "It's very convenient and useful."
+  },
+  {
+    "no": 50,
+    "category": "장점3",
+    "korean": "이 것은 나에게 매우 도움이 된다.",
+    "english": "It's very helpful for me."
+  }
+]
