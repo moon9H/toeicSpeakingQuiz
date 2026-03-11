@@ -1,0 +1,350 @@
+[
+  {
+    "no": 1,
+    "category": "경험/교육",
+    "korean": "그들은 새로운 것을 배울 수 있다",
+    "english": "They can learn new things"
+  },
+  {
+    "no": 2,
+    "category": "경험/교육",
+    "korean": "그들은 새로운 사람을 만나고 인맥을 넓힐 수 있다",
+    "english": "They can meet new people and expand their network"
+  },
+  {
+    "no": 3,
+    "category": "경험/교육",
+    "korean": "나는 것들이 경험하고 그들의 겸 문을 넓힐 수 있다",
+    "english": "They can have a lot of experience and broaden their perspective"
+  },
+  {
+    "no": 4,
+    "category": "경험/교육",
+    "korean": "그들은 좋은 결정을 하지 못하는데 왜냐하면 충분히 성숙하지 않았기 때문이다",
+    "english": "They can't make good decisions because they are not mature enough"
+  },
+  {
+    "no": 5,
+    "category": "집중",
+    "korean": "그들은 집중을 못하게 될 것이다",
+    "english": "They will be distracted"
+  },
+  {
+    "no": 6,
+    "category": "집중",
+    "korean": "그들은 그들의 학업에 집중할 수가 없다",
+    "english": "They can't focus on their studies"
+  },
+  {
+    "no": 7,
+    "category": "집중",
+    "korean": "그들은 학교에서 좋은 성적을 받을 수 없다",
+    "english": "They can't get good grades at school"
+  },
+  {
+    "no": 8,
+    "category": "집중",
+    "korean": "그들은 학업 에서 뒤쳐질 것이다",
+    "english": "They will fall behind in classes"
+  },
+  {
+    "no": 9,
+    "category": "집중",
+    "korean": "그들은 효율적으로 일할 수 없다",
+    "english": "They can't work efficiently"
+  },
+  {
+    "no": 10,
+    "category": "돈",
+    "korean": "그들은 돈을 절약할 수 있다",
+    "english": "They can save money"
+  },
+  {
+    "no": 11,
+    "category": "돈",
+    "korean": "생활비가 너무 비싸다",
+    "english": "The cost of living is too high"
+  },
+  {
+    "no": 12,
+    "category": "돈",
+    "korean": "그들은 먹고 살기가 어렵다",
+    "english": "They can't make a living"
+  },
+  {
+    "no": 13,
+    "category": "돈",
+    "korean": "나는 높은 급여를 받을 수 있다",
+    "english": "I can get a high salary"
+  },
+  {
+    "no": 14,
+    "category": "돈",
+    "korean": "명사의 가격이 너무 비싸다",
+    "english": "The cost of n is too expensive"
+  },
+  {
+    "no": 15,
+    "category": "돈",
+    "korean": "이것은 돈 낭비다",
+    "english": "It's a waste of money"
+  },
+  {
+    "no": 16,
+    "category": "돈",
+    "korean": "그것은 좋은 투자 인데 왜냐하면 삶을 더 낫게 만들어 준다",
+    "english": "That's a good investment because it makes lives better"
+  },
+  {
+    "no": 17,
+    "category": "혼자 vs 같이",
+    "korean": "그들은 더 잘 집중할 수 있다",
+    "english": "They can focus better"
+  },
+  {
+    "no": 18,
+    "category": "혼자 vs 같이",
+    "korean": "그들은 다른 사람들에게 방해 받지 않을 것이다",
+    "english": "They will not be distracted by others"
+  },
+  {
+    "no": 19,
+    "category": "혼자 vs 같이",
+    "korean": "그들은 그들의 스케줄을 정할 수 있다",
+    "english": "They can set their own schedule"
+  },
+  {
+    "no": 20,
+    "category": "혼자 vs 같이",
+    "korean": "그들은 더 자유로울 수 있다",
+    "english": "They can have more free"
+  },
+  {
+    "no": 21,
+    "category": "혼자 vs 같이",
+    "korean": "나는 더 편안함을 느낀다",
+    "english": "I feel more comfortable"
+  },
+  {
+    "no": 22,
+    "category": "혼자 vs 같이",
+    "korean": "이것은 재미있고 즐거움을 준다",
+    "english": "It's fun and entertaining"
+  },
+  {
+    "no": 23,
+    "category": "기술",
+    "korean": "그들은 정보를 얻고 다른 사람과 공유할 수 있다",
+    "english": "They can get information and share it with other people"
+  },
+  {
+    "no": 24,
+    "category": "기술",
+    "korean": "가족 처럼 느껴진다",
+    "english": "It feels more like a family"
+  },
+  {
+    "no": 25,
+    "category": "기술",
+    "korean": "그들은 인터넷에서 많은 유용한 정보를 얻을 수 있다",
+    "english": "They can get a lot of useful information on the internet"
+  },
+  {
+    "no": 26,
+    "category": "기술",
+    "korean": "그들은 언제 어디서나 그들의 스마트폰으로 동사 할 수 있다",
+    "english": "They can v anywhere, anytime on their smartphones"
+  },
+  {
+    "no": 27,
+    "category": "기술",
+    "korean": "이것은 더 빠르고 편리하다",
+    "english": "It's faster and convenient"
+  },
+  {
+    "no": 28,
+    "category": "기술",
+    "korean": "인터넷에는 많은 부정확한 정보가 있어서 믿을만 하지가 않다",
+    "english": "There is a lot of inaccurate information on the internet, so it's not reliable"
+  },
+  {
+    "no": 29,
+    "category": "기술",
+    "korean": "이것은 학생들에게 매우 집중을 분산시키는 것이라 학생들은 공부에 집중할 수가 없다",
+    "english": "It's very distracting for students, so they can't focus on their studies"
+  },
+  {
+    "no": 30,
+    "category": "기술",
+    "korean": "돈 낭비다",
+    "english": "It's a waste of money"
+  },
+  {
+    "no": 31,
+    "category": "기술",
+    "korean": "이것은 너무 지나치게 비싸다",
+    "english": "It's too expensive"
+  },
+  {
+    "no": 32,
+    "category": "기술",
+    "korean": "나는 즉각적인 답변을 받을 수 있다",
+    "english": "I can get responses right away"
+  },
+  {
+    "no": 33,
+    "category": "기술",
+    "korean": "나는 말하는 사람의 감정을 더 정확하게 이해할 수 있다",
+    "english": "I can understand the feeling of the speaker more accurately"
+  },
+  {
+    "no": 34,
+    "category": "특징",
+    "korean": "그들은 좋은 분위기를 만들 수 있다",
+    "english": "They can make a friendly atmosphere"
+  },
+  {
+    "no": 35,
+    "category": "특징",
+    "korean": "그들은 다른 사람들과 더 잘 소통할 수 있다",
+    "english": "They can communicate with others better"
+  },
+  {
+    "no": 36,
+    "category": "특징",
+    "korean": "그들은 좋은 팀 플레이어가 될 수 있고 다른 사람들과 좋은 관계를 맺을 수 있다",
+    "english": "They can be good team players and make good relationships with others"
+  },
+  {
+    "no": 37,
+    "category": "특징",
+    "korean": "그들은 좋은 평판을 가질 수 있다",
+    "english": "They can have a good reputation"
+  },
+  {
+    "no": 38,
+    "category": "특징",
+    "korean": "그들은 매우 영향력이 있을 수 있다",
+    "english": "They can be very influential"
+  },
+  {
+    "no": 39,
+    "category": "특징",
+    "korean": "그들은 다른 사람들을 동기부여 해줄 수 있다",
+    "english": "They can motivate others"
+  },
+  {
+    "no": 40,
+    "category": "특징",
+    "korean": "모든 것이 급변하고 경쟁이 치열하다",
+    "english": "Everything is always changing and there is a lot of competition"
+  },
+  {
+    "no": 41,
+    "category": "특징",
+    "korean": "그들은 많은 도전과 어려움을 직면하게 된다",
+    "english": "They face a lot of challenges and difficulties"
+  },
+  {
+    "no": 42,
+    "category": "특징",
+    "korean": "그는 그의 창의성이 더 팩의 다양한 상황을 잘 처리할 수 있다",
+    "english": "He is able to handle a variety of situation due to his creativity"
+  },
+  {
+    "no": 43,
+    "category": "특징",
+    "korean": "그들은 많은 경험을 가지고 있다",
+    "english": "They have a lot of experience"
+  },
+  {
+    "no": 44,
+    "category": "업무환경 & 기업성공",
+    "korean": "직원들은 더 효율적이고 생산적으로 일할 수 있다",
+    "english": "Employees can work more efficiently and productively"
+  },
+  {
+    "no": 45,
+    "category": "업무환경 & 기업성공",
+    "korean": "직원들은 그들의 직장에 더 만족할 수 있다",
+    "english": "Employees can be more satisfied with their jobs"
+  },
+  {
+    "no": 46,
+    "category": "업무환경 & 기업성공",
+    "korean": "이것은 더 나은 업무 환경을 만든다",
+    "english": "It can make a better work environment"
+  },
+  {
+    "no": 47,
+    "category": "업무환경 & 기업성공",
+    "korean": "그들은 프로페셔널 하지 않게 볼 수 있다",
+    "english": "They might appear less professional"
+  },
+  {
+    "no": 48,
+    "category": "업무환경 & 기업성공",
+    "korean": "고객들은 만족할 것이고 고객 충성도를 유지할 것이다",
+    "english": "Customers will be satisfied and remain loyal"
+  },
+  {
+    "no": 49,
+    "category": "업무환경 & 기업성공",
+    "korean": "이것은 더 많은 고객을 끌어들일 것이다",
+    "english": "It will attract more customers"
+  },
+  {
+    "no": 50,
+    "category": "업무환경 & 기업성공",
+    "korean": "업체가 더 성공할 것이다",
+    "english": "The business will be more successful"
+  },
+  {
+    "no": 51,
+    "category": "업무환경 & 기업성공",
+    "korean": "사람들은 sns를 더 자주 이용해서 더 효과적일 것이다",
+    "english": "People frequently use social media , so it will be more effective"
+  },
+  {
+    "no": 52,
+    "category": "건강",
+    "korean": "이것은 그들의 스트레스를 풀어주고 그들은 칠 수 있다",
+    "english": "It relieves their stress and they can relax"
+  },
+  {
+    "no": 53,
+    "category": "건강",
+    "korean": "이것은 그들의 건강에 좋다",
+    "english": "It's good for their health"
+  },
+  {
+    "no": 54,
+    "category": "건강",
+    "korean": "이것은 그들의 건강에 좋지 않다",
+    "english": "It's not good for their health"
+  },
+  {
+    "no": 55,
+    "category": "환경",
+    "korean": "이것은 환경에 좋다",
+    "english": "It's good for the environment"
+  },
+  {
+    "no": 56,
+    "category": "환경",
+    "korean": "환경오염은 요즘 매우 심각한 문제다",
+    "english": "Pollution is a serious issue these days"
+  },
+  {
+    "no": 57,
+    "category": "환경",
+    "korean": "이것은 더 깨끗한 환경을 만들 수 있다",
+    "english": "It can make a cleaner environment"
+  },
+  {
+    "no": 58,
+    "category": "환경",
+    "korean": "우리는 환경을 보호할 수 있을 것이다",
+    "english": "We will be able to protect the environment"
+  }
+]
