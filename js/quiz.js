@@ -6,14 +6,13 @@ export class QuizApp {
     this.sentences = sentences;
 
     this.filteredSentences = [...sentences];
+    this.randomQueue = [];
 
     this.currentIndex = 0;
     this.currentQuestion = null;
 
     this.correctCount = 0;
     this.wrongCount = 0;
-
-    this.lastQuestionNo = null;
   }
 
   bindEvents() {
@@ -42,7 +41,7 @@ export class QuizApp {
     );
 
     this.currentIndex = 0;
-    this.lastQuestionNo = null;
+    this.randomQueue = [];
 
     this.pickQuestion();
     this.updateStats();
@@ -51,32 +50,22 @@ export class QuizApp {
   pickQuestion() {
     if (this.filteredSentences.length === 0) return;
 
-    this.currentQuestion =
-      this.elements.modeEl.value === "random"
-        ? this.shufflePick()
-        : this.sequentialPick();
-
-    this.lastQuestionNo = this.currentQuestion.no;
+    if (this.elements.modeEl.value === "random") {
+      this.currentQuestion = this.randomPick();
+    } else {
+      this.currentQuestion = this.sequentialPick();
+    }
 
     this.renderQuestion();
     this.updateStats();
   }
 
-  shufflePick() {
-    if (this.filteredSentences.length === 1) {
-      return this.filteredSentences[0];
+  randomPick() {
+    if (this.randomQueue.length === 0) {
+      this.randomQueue = this.shuffleArray([...this.filteredSentences]);
     }
 
-    let picked;
-
-    do {
-      picked =
-        this.filteredSentences[
-          Math.floor(Math.random() * this.filteredSentences.length)
-        ];
-    } while (picked.no === this.lastQuestionNo);
-
-    return picked;
+    return this.randomQueue.shift();
   }
 
   sequentialPick() {
@@ -85,6 +74,15 @@ export class QuizApp {
 
     this.currentIndex++;
     return question;
+  }
+
+  shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
   }
 
   renderQuestion() {
