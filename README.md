@@ -1,6 +1,12 @@
 # 🚀 TOEIC Speaking Sentence Quiz
 
 <p align="center">
+<a href="https://moon9H.github.io/toeicSpeakingQuiz/">
+<img src="https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-2ea44f?style=for-the-badge&logo=githubpages">
+</a>
+</p>
+
+<p align="center">
 토익 스피킹 만능 문장을  
 <strong>한글 → 영어로 직접 타이핑하며 암기하는 학습 웹앱</strong>
 </p>
@@ -19,6 +25,12 @@
 | 문제 화면 | 정답 화면 | 오답 화면 |
 |----------|----------|----------|
 | ![](docs/img/preview.png) | ![](docs/img/correct.png) | ![](docs/img/wrong.png) |
+
+---
+
+# 🔗 Live Demo
+
+👉 https://moon9H.github.io/toeicSpeakingQuiz/
 
 ---
 
