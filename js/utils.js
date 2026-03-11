@@ -4,6 +4,7 @@ export function normalizeText(text) {
     .toLowerCase()
     .replace(/[’‘`]/g, "'")
     .replace(/[“”]/g, '"')
+    .replace(/'/g, "")        // apostrophe 제거
     .replace(/[.,!?]/g, "")
     .replace(/\s+/g, " ")
     .trim();
