@@ -27,7 +27,9 @@ export function getElements() {
     nextBtn: document.getElementById("nextBtn"),
     resetStatsBtn: document.getElementById("resetStatsBtn"),
 
+    part2Btn: document.getElementById("part2Btn"),
     part3Btn: document.getElementById("part3Btn"),
+    part4Btn: document.getElementById("part4Btn"),
     part5Btn: document.getElementById("part5Btn")
   };
 
