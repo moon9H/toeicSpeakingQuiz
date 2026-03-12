@@ -1,55 +1,6 @@
-export function normalizeText(text) {
-  return text
-    .toLowerCase()
-    .replace(/[’‘`]/g, "'")
-    .replace(/[“”]/g, '"')
-    .replace(/'/g, "")
-    .replace(/"/g, "")
-    .replace(/[.,!?;:()\-]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-export function escapeHtml(text) {
-
-  const div = document.createElement("div");
-  div.textContent = text;
-  return div.innerHTML;
-
-}
-
-export function getFilterRange(value, totalCount) {
-  if (value === "all") {
-    return [1, totalCount];
-  }
-
-  const [start, end] = value.split("-").map(Number);
-  return [start, end];
-}
-
-export function buildRangeOptions(totalCount, step = 10) {
-  const options = [
-    { value: "all", label: `전체 ${totalCount}문장` }
-  ];
-
-  for (let start = 1; start <= totalCount; start += step) {
-    const end = Math.min(start + step - 1, totalCount);
-    options.push({
-      value: `${start}-${end}`,
-      label: `${start}~${end}번`
-    });
-  }
-
-  return options;
-}
-
-export function getAnswerComparison(userAnswer, answer) {
-  const normalizedUser = normalizeText(userAnswer);
-  const normalizedAnswer = normalizeText(answer);
-
-  return {
-    normalizedUser,
-    normalizedAnswer,
-    isMatch: normalizedUser === normalizedAnswer,
-  };
-}
+export {
+  getAnswerComparison,
+  normalizeText,
+  escapeHtml,
+} from "./utils/answer-utils.js";
+export { getFilterRange, buildRangeOptions } from "./utils/range-utils.js";

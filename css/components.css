@@ -33,6 +33,17 @@
   color: #374151;
 }
 
+.topbar-select label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.topbar-select select {
+  width: 220px;
+}
+
 .inline {
   display: flex;
   align-items: center;
@@ -81,6 +92,10 @@ select {
   color: #374151;
 }
 
+.question-title.empty-warning {
+  color: #b91c1c;
+}
+
 .meaning {
   font-size: 28px;
   font-weight: 800;
@@ -89,10 +104,18 @@ select {
   word-break: keep-all;
 }
 
+.meaning.empty-warning {
+  color: #b91c1c;
+}
+
 .hint {
   margin-top: 14px;
   font-size: 14px;
   color: #6b7280;
+}
+
+.hint.empty-warning-sub {
+  color: #dc2626;
 }
 
 textarea {
@@ -140,6 +163,17 @@ button:active {
 .secondary {
   background: #f3f4f6;
   color: #111827;
+}
+
+.danger {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fca5a5;
+  box-shadow: 0 10px 18px rgba(239, 68, 68, 0.12);
+}
+
+.danger:hover {
+  background: #fecaca;
 }
 
 .success {

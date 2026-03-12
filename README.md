@@ -16,7 +16,7 @@
 <img src="https://img.shields.io/badge/CSS-3-blue">
 <img src="https://img.shields.io/badge/JavaScript-ES6-yellow">
 <img src="https://img.shields.io/badge/Data-JSON-green">
-<img src="https://img.shields.io/badge/version-v1.4-brightgreen">
+<img src="https://img.shields.io/badge/version-v1.5-brightgreen">
 </p>
 
 ---
@@ -68,6 +68,15 @@
 ### 📚 범위 학습
 - 전체 범위 학습
 - 10문장 단위 범위 선택 가능
+
+### 📝 학습 기록 저장
+- 마지막 학습 상태를 localStorage에 자동 저장
+- 새로고침 후에도 Part, 범위, 옵션, 현재 문제 상태 복원
+
+### ❌ 오답만 다시 보기
+- 틀린 문제를 누적 기록
+- 오답만 다시 보기 모드에서 랜덤 출제
+- 현재까지 틀린 문제 수를 바로 확인 가능
 
 ### 🔀 Part 전환 지원
 - Part 2 *(데이터 준비 예정)*
@@ -129,8 +138,19 @@ toeic-speaking-quiz
 │
 ├── js
 │   ├── app.js
-│   ├── quiz.js
+│   ├── app
+│   │   ├── part-datasets.js
+│   │   └── part-ui.js
 │   ├── dom.js
+│   ├── quiz
+│   │   ├── quiz.js
+│   │   ├── quiz-state.js
+│   │   └── quiz-renderer.js
+│   ├── storage
+│   │   └── learning-session.js
+│   ├── utils
+│   │   ├── answer-utils.js
+│   │   └── range-utils.js
 │   └── utils.js
 │
 └── data
@@ -145,13 +165,13 @@ toeic-speaking-quiz
 - **퀴즈 동작 구조**
 
 ```
-       sentences_partX.json
+      sentences_partX.json
                 ↓
-         app.js (데이터 로드)
+   app.js (초기화 / 세션 복원)
                 ↓
-     QuizApp 생성 및 이벤트 연결
+    QuizApp 생성 및 이벤트 연결
                 ↓
-       Part / 범위 / 모드 선택
+  Part / 범위 / 문제 보기 모드 선택
                 ↓
              문제 출제
                 ↓
@@ -161,12 +181,27 @@ toeic-speaking-quiz
                 ↓
              정답/오답 판정
                 ↓
-        상태 복원 / 통계 업데이트
+  localStorage 저장 / 상태 복원 / 통계 업데이트
 ```
 
 ---
 
 # 📦 Version History
+
+<details>
+<summary><strong>v1.5</strong></summary>
+
+### ✨ Added
+- localStorage 기반 학습 기록 저장 및 복원
+- 오답만 다시 보기 모드 추가
+- 누적 오답 수 표시 및 오답 전용 학습 흐름 지원
+
+### 🔧 Refactor
+- 퀴즈 상태, 렌더링, 답안 유틸, 범위 유틸을 역할별 파일로 분리
+- app 초기화 로직에서 Part 데이터 로드와 UI 설정 로직 분리
+- 저장 세션과 오답 모드가 함께 동작할 때 상태 흐름 정리
+
+</details>
 
 <details>
 <summary><strong>v1.4</strong></summary>
