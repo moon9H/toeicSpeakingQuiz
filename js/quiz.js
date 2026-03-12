@@ -15,6 +15,19 @@ export class QuizApp {
     this.wrongCount = 0;
   }
 
+  setSentences(sentences) {
+    this.sentences = sentences;
+    this.filteredSentences = [...sentences];
+    this.currentIndex = 0;
+    this.currentQuestion = null;
+    this.correctCount = 0;
+    this.wrongCount = 0;
+    this.randomQueue = [];
+
+    this.hideResult();
+    this.applyFilter();
+  }
+
   bindEvents() {
     this.elements.checkBtn.addEventListener("click", () => this.checkAnswer());
     this.elements.showAnswerBtn.addEventListener("click", () => this.revealAnswer());
@@ -34,7 +47,10 @@ export class QuizApp {
   }
 
   applyFilter() {
-    const [start, end] = getFilterRange(this.elements.countFilterEl.value);
+    const [start, end] = getFilterRange(
+      this.elements.countFilterEl.value,
+      this.sentences.length
+    );
 
     this.filteredSentences = this.sentences.filter(
       (item) => item.no >= start && item.no <= end
@@ -42,6 +58,8 @@ export class QuizApp {
 
     this.currentIndex = 0;
     this.randomQueue = [];
+    this.correctCount = 0;
+    this.wrongCount = 0;
 
     this.pickQuestion();
     this.updateStats();

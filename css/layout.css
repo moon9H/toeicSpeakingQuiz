@@ -73,3 +73,20 @@ body {
   flex-wrap: wrap;
   margin-top: 16px;
 }
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.header-text {
+  max-width: 70%;
+}
+
+.part-tabs {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
