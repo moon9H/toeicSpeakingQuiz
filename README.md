@@ -16,6 +16,7 @@
 <img src="https://img.shields.io/badge/CSS-3-blue">
 <img src="https://img.shields.io/badge/JavaScript-ES6-yellow">
 <img src="https://img.shields.io/badge/Data-JSON-green">
+<img src="https://img.shields.io/badge/version-v1.1-brightgreen">
 </p>
 
 ---
@@ -44,53 +45,22 @@
 
 으로 학습할 수 있는 웹앱을 만들었습니다.
 
-이 프로젝트는 **능동적인 암기 학습**을 목표로 합니다.
+현재 v1.1에서는 **Part 3 / Part 5 데이터셋 전환 기능**까지 지원합니다.
 
 ---
 
-# ✨ Demo
-
-📌 한글 뜻을 보고 영어 문장을 입력
-
-```
-이 것은 나의 스트레스를 풀어 준다.
-나는 요즘 스트레스를 많이 받았다.
-그래서 이것이 필요하다.
-```
-
-사용자가 입력
-
-```
-It relieves my stress. I'm stressed out these days. So, I need this.
-```
-
-결과
-
-```
-✔ 정답
-```
-
-또는
-
-```
-❌ 오답
-정답: It relieves my stress...
-```
-
----
-
-# 🎯 Features
+# ✨ Features
 
 ### 📘 한글 기반 학습
 - 영어 문장을 바로 보여주지 않음
 - 한글 뜻을 보고 직접 타이핑
 
-### ⚡ 즉시 채점
-다음 요소 자동 보정
-
+### ✅ 즉시 채점
+다음 요소를 자동 보정하여 비교
 - 대소문자
 - 공백
 - 문장부호
+- apostrophe 차이
 
 ### 🎲 문제 출제 방식
 
@@ -98,13 +68,19 @@ It relieves my stress. I'm stressed out these days. So, I need this.
 - 순차 출제
 
 ### 📚 범위 학습
+- 전체 범위 학습
+- 10문장 단위 범위 선택 가능
 
-- 전체 50문장
-- 1~10
-- 11~20
-- 21~30
-- 31~40
-- 41~50
+### 🔀 Part 전환 지원
+- Part 3 문장 학습
+- Part 5 문장 학습
+
+### 🏷 카테고리 표시 옵션
+- 문제 번호와 함께 카테고리 표시 가능
+- 필요 시 숨김 가능
+
+### ⏭ 자동 다음 문제
+- 정답 입력 후 자동으로 다음 문제로 이동 가능
 
 ### 📊 학습 통계
 
@@ -153,51 +129,66 @@ toeic-speaking-quiz
 
 ---
 
-# ⚙️ How to Run
+# 🧩 Core Logic
 
-JSON 데이터를 `fetch()`로 읽기 때문에  
-**로컬 서버 환경에서 실행해야 합니다**
-
-### 방법 1️⃣ VSCode Live Server
+- **퀴즈 동작 구조**
 
 ```
-index.html 우클릭
-→ Open with Live Server
-```
-
-### 방법 2️⃣ Python 서버
-
-```
-python -m http.server 5500
-```
-
-브라우저 접속
-
-```
-http://localhost:5500
+sentences.json / sentences2.json
+                ↓
+         app.js (데이터 로드)
+                ↓
+     QuizApp 생성 및 이벤트 연결
+                ↓
+       Part / 범위 / 모드 선택
+                ↓
+             문제 출제
+                ↓
+           사용자 답안 입력
+                ↓
+       normalizeText()로 정규화 비교
+                ↓
+             정답/오답 판정
+                ↓
+            통계 업데이트
 ```
 
 ---
 
-# 🧩 Core Logic
+# 📦 Version History
 
-퀴즈 동작 구조
+<details>
+<summary><strong>v1.1</strong></summary>
 
-```
-sentences.json
-        ↓
-app.js (데이터 로드)
-        ↓
-QuizApp 생성
-        ↓
-문제 출제
-        ↓
-사용자 입력
-        ↓
-정답 비교
-        ↓
-통계 업데이트
-```
+### ✨ Added
+- Part 3 / Part 5 데이터셋 전환 기능
+- 헤더 우측 Part 선택 버튼 UI
+
+### 🔧 Improved
+- 문제 출제 범위 옵션 자동 생성
+- 랜덤 문제 중복 방지 로직 개선
+
+### 📝 Docs
+- README 업데이트
+- 프로젝트 구조 정리
+
+</details>
+
+
+<details>
+<summary><strong>v1.0</strong></summary>
+
+### 🎉 Initial Release
+
+### Features
+- 한글 → 영어 타이핑 기반 토익 스피킹 문장 퀴즈
+- 랜덤 / 순차 문제 출제
+- 문제 범위 선택 기능
+- 정답 / 오답 통계 표시
+- 자동 채점 시스템
+- GitHub Pages 배포
+
+</details>
 
 ---
 
