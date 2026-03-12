@@ -107,7 +107,7 @@ export class QuizApp {
     if (!this.currentQuestion) return;
 
     const categoryText = this.elements.showCategoryEl.checked
-      ? ` · ${this.currentQuestion.category}`
+      ? ` ${this.currentQuestion.category}`
       : "";
 
     this.elements.questionTitleEl.textContent =
