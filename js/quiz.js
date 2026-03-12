@@ -7,6 +7,7 @@ export class QuizApp {
 
     this.filteredSentences = [...sentences];
     this.randomQueue = [];
+    this.history = [];
 
     this.currentIndex = 0;
     this.currentQuestion = null;
@@ -23,6 +24,7 @@ export class QuizApp {
     this.correctCount = 0;
     this.wrongCount = 0;
     this.randomQueue = [];
+    this.history = [];
 
     this.hideResult();
     this.applyFilter();
@@ -31,6 +33,7 @@ export class QuizApp {
   bindEvents() {
     this.elements.checkBtn.addEventListener("click", () => this.checkAnswer());
     this.elements.showAnswerBtn.addEventListener("click", () => this.revealAnswer());
+    this.elements.prevBtn.addEventListener("click", () => {this.prevQuestion();});
     this.elements.nextBtn.addEventListener("click", () => this.pickQuestion());
     this.elements.resetStatsBtn.addEventListener("click", () => this.resetStats());
 
@@ -58,15 +61,24 @@ export class QuizApp {
 
     this.currentIndex = 0;
     this.randomQueue = [];
+    this.history = [];
     this.correctCount = 0;
     this.wrongCount = 0;
 
-    this.pickQuestion();
+    this.pickQuestion(false);
     this.updateStats();
   }
 
-  pickQuestion() {
+  pickQuestion(saveHistory = true) {
     if (this.filteredSentences.length === 0) return;
+
+    if (saveHistory && this.currentQuestion) {
+      this.history.push({
+        currentQuestion: this.currentQuestion,
+        currentIndex: this.currentIndex,
+        randomQueue: [...this.randomQueue]
+      });
+    }
 
     if (this.elements.modeEl.value === "random") {
       this.currentQuestion = this.randomPick();
@@ -94,6 +106,18 @@ export class QuizApp {
     return question;
   }
 
+  prevQuestion() {
+    if (this.history.length === 0) return;
+
+    const prevState = this.history.pop();
+    this.currentQuestion = prevState.currentQuestion;
+    this.currentIndex = prevState.currentIndex;
+    this.randomQueue = [...prevState.randomQueue];
+
+    this.renderQuestion();
+    this.updateStats();
+  }
+
   shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -119,6 +143,8 @@ export class QuizApp {
 
     this.elements.answerInputEl.value = "";
     this.elements.answerInputEl.focus();
+
+    this.elements.prevBtn.disabled = this.history.length === 0;
 
     this.hideResult();
   }

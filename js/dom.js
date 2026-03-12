@@ -23,6 +23,7 @@ export function getElements() {
 
     checkBtn: document.getElementById("checkBtn"),
     showAnswerBtn: document.getElementById("showAnswerBtn"),
+    prevBtn: document.getElementById("prevBtn"),
     nextBtn: document.getElementById("nextBtn"),
     resetStatsBtn: document.getElementById("resetStatsBtn"),
 
