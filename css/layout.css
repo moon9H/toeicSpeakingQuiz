@@ -54,6 +54,19 @@ body {
   margin-bottom: 18px;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.topbar-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .pill-group {
   display: flex;
   gap: 10px;

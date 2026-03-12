@@ -37,8 +37,15 @@
             <div class="pill" id="scorePill">정답 0 · 오답 0</div>
             <div class="pill" id="accuracyPill">정확도 0%</div>
           </div>
-          <div class="pill-group">
-            <button class="secondary" id="resetStatsBtn">기록 초기화</button>
+          <div class="topbar-actions">
+            <div class="topbar-select">
+              <label for="reviewMode">문제 보기</label>
+              <select id="reviewMode">
+                <option value="all">전체 문제</option>
+                <option value="wrong">오답만 다시 보기</option>
+              </select>
+            </div>
+            <button class="danger" id="resetStatsBtn">기록 초기화</button>
           </div>
         </section>
 

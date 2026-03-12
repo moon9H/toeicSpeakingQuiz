@@ -9,9 +9,11 @@ import {
 } from "./quiz-renderer.js";
 import {
   applyFilterToState,
+  clearWrongQuestions,
   clearFuture,
   createQuizState,
   createSnapshot,
+  markQuestionWrong,
   pickNextQuestion,
   popFuture,
   popHistory,
@@ -46,6 +48,7 @@ export class QuizApp {
 
     this.elements.modeEl.addEventListener("change", () => this.applyFilter());
     this.elements.countFilterEl.addEventListener("change", () => this.applyFilter());
+    this.elements.reviewModeEl.addEventListener("change", () => this.applyFilter());
     this.elements.showCategoryEl.addEventListener("change", () => {
       this.renderQuestion(false);
       this.notifyStateChange();
@@ -63,7 +66,14 @@ export class QuizApp {
 
   applyFilter() {
     this.clearPendingAutoNext();
-    applyFilterToState(this.state, this.elements.countFilterEl.value);
+    applyFilterToState(
+      this.state,
+      this.elements.countFilterEl.value,
+      this.elements.reviewModeEl.value
+    );
+    if (this.state.reviewMode === "wrong") {
+      this.elements.modeEl.value = "random";
+    }
     this.pickQuestion(false);
     updateStats(this.elements, this.state);
     this.notifyStateChange();
@@ -72,7 +82,13 @@ export class QuizApp {
   pickQuestion(saveHistory = true) {
     this.clearPendingAutoNext();
 
-    if (this.state.filteredSentences.length === 0) return;
+    if (this.state.filteredSentences.length === 0) {
+      this.state.currentQuestion = null;
+      this.renderQuestion();
+      updateStats(this.elements, this.state);
+      this.notifyStateChange();
+      return;
+    }
 
     if (saveHistory && this.state.currentQuestion) {
       pushHistory(this.state, this.captureCurrentState());
@@ -196,6 +212,7 @@ export class QuizApp {
     }
 
     this.updateScore("wrong");
+    markQuestionWrong(this.state, this.state.currentQuestion.no);
     updateStats(this.elements, this.state);
 
     this.showResult(
@@ -227,8 +244,11 @@ export class QuizApp {
     this.state.correctCount = 0;
     this.state.wrongCount = 0;
     this.state.currentQuestionResult = null;
+    clearWrongQuestions(this.state);
+    this.elements.reviewModeEl.value = "all";
     clearFuture(this.state);
 
+    this.applyFilter();
     this.hideResult();
     updateStats(this.elements, this.state);
     this.elements.answerInputEl.focus();
@@ -243,6 +263,8 @@ export class QuizApp {
       randomQueueNos: this.state.randomQueue.map((item) => item.no),
       correctCount: this.state.correctCount,
       wrongCount: this.state.wrongCount,
+      wrongQuestionNos: [...this.state.wrongQuestionNos],
+      reviewMode: this.state.reviewMode,
       history: this.state.history.map((snapshot) => this.serializeSnapshot(snapshot)),
       future: this.state.future.map((snapshot) => this.serializeSnapshot(snapshot)),
       viewState: captureViewState(this.elements),
@@ -260,6 +282,8 @@ export class QuizApp {
     this.state.randomQueue = this.mapQuestionNos(savedState.randomQueueNos);
     this.state.correctCount = savedState.correctCount ?? 0;
     this.state.wrongCount = savedState.wrongCount ?? 0;
+    this.state.wrongQuestionNos = savedState.wrongQuestionNos ?? [];
+    this.state.reviewMode = savedState.reviewMode ?? "all";
     this.state.history = (savedState.history ?? [])
       .map((snapshot) => this.deserializeSnapshot(snapshot))
       .filter(Boolean);
@@ -291,6 +315,8 @@ export class QuizApp {
       randomQueueNos: snapshot.randomQueue.map((item) => item.no),
       correctCount: snapshot.correctCount,
       wrongCount: snapshot.wrongCount,
+      wrongQuestionNos: [...this.state.wrongQuestionNos],
+      reviewMode: this.state.reviewMode,
       viewState: snapshot.viewState,
     };
   }

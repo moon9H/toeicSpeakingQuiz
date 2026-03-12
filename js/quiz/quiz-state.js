@@ -4,6 +4,8 @@ export function createQuizState(sentences) {
   return {
     sentences,
     filteredSentences: [...sentences],
+    wrongQuestionNos: [],
+    reviewMode: "all",
     randomQueue: [],
     history: [],
     future: [],
@@ -18,6 +20,8 @@ export function createQuizState(sentences) {
 export function resetQuizState(state, sentences) {
   state.sentences = sentences;
   state.filteredSentences = [...sentences];
+  state.wrongQuestionNos = [];
+  state.reviewMode = "all";
   state.randomQueue = [];
   state.history = [];
   state.future = [];
@@ -28,12 +32,12 @@ export function resetQuizState(state, sentences) {
   state.wrongCount = 0;
 }
 
-export function applyFilterToState(state, filterValue) {
-  const [start, end] = getFilterRange(filterValue, state.sentences.length);
-
-  state.filteredSentences = state.sentences.filter(
-    (item) => item.no >= start && item.no <= end
-  );
+export function applyFilterToState(state, filterValue, reviewMode = state.reviewMode) {
+  state.reviewMode = reviewMode;
+  state.filteredSentences =
+    reviewMode === "wrong"
+      ? state.sentences.filter((item) => state.wrongQuestionNos.includes(item.no))
+      : getRangeSentences(state.sentences, filterValue);
   state.currentIndex = 0;
   state.randomQueue = [];
   state.history = [];
@@ -42,6 +46,23 @@ export function applyFilterToState(state, filterValue) {
   state.currentQuestionResult = null;
   state.correctCount = 0;
   state.wrongCount = 0;
+}
+
+function getRangeSentences(sentences, filterValue) {
+  const [start, end] = getFilterRange(filterValue, sentences.length);
+  return sentences.filter((item) => item.no >= start && item.no <= end);
+}
+
+export function markQuestionWrong(state, questionNo) {
+  if (!questionNo || state.wrongQuestionNos.includes(questionNo)) {
+    return;
+  }
+
+  state.wrongQuestionNos = [...state.wrongQuestionNos, questionNo];
+}
+
+export function clearWrongQuestions(state) {
+  state.wrongQuestionNos = [];
 }
 
 export function pickNextQuestion(state, mode) {

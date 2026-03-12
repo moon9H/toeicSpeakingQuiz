@@ -1,9 +1,16 @@
 export function renderQuestion(elements, state, options = {}) {
   const { resetView = true, showCategory = true } = options;
 
-  if (!state.currentQuestion) return;
+  if (!state.currentQuestion) {
+    renderEmptyQuestion(elements, state);
+    return;
+  }
 
   const categoryText = showCategory ? ` ${state.currentQuestion.category}` : "";
+
+  elements.questionTitleEl.classList.remove("empty-warning");
+  elements.meaningEl.classList.remove("empty-warning");
+  elements.hintEl.classList.remove("empty-warning-sub");
 
   elements.questionTitleEl.textContent =
     `${state.currentQuestion.no}.${categoryText}`;
@@ -14,6 +21,10 @@ export function renderQuestion(elements, state, options = {}) {
   elements.prevBtn.disabled = state.history.length === 0;
   elements.nextBtn.textContent =
     state.future.length > 0 ? "다음으로" : "다음 문제";
+  elements.nextBtn.disabled = false;
+  elements.answerInputEl.disabled = false;
+  elements.checkBtn.disabled = false;
+  elements.showAnswerBtn.disabled = false;
 
   if (resetView) {
     elements.answerInputEl.value = "";
@@ -62,4 +73,29 @@ export function restoreViewState(elements, viewState) {
   elements.resultTitleEl.textContent = viewState.resultTitle;
   elements.resultBodyEl.innerHTML = viewState.resultBodyHtml;
   elements.answerInputEl.focus();
+}
+
+function renderEmptyQuestion(elements, state) {
+  const isWrongMode = state.reviewMode === "wrong";
+
+  elements.questionTitleEl.textContent = isWrongMode
+    ? "오답 노트 비어 있음"
+    : "문제가 없습니다";
+  elements.questionTitleEl.classList.toggle("empty-warning", isWrongMode);
+  elements.meaningEl.textContent = isWrongMode
+    ? "아직 틀린 문제가 없습니다. 문제를 틀리면 여기에서 다시 볼 수 있습니다."
+    : "현재 조건에 맞는 문제가 없습니다.";
+  elements.meaningEl.classList.toggle("empty-warning", isWrongMode);
+  elements.hintEl.textContent = isWrongMode
+    ? `오답으로 기록된 문제 ${state.wrongQuestionNos.length}개`
+    : "출제 범위를 다시 선택해 보세요.";
+  elements.hintEl.classList.toggle("empty-warning-sub", isWrongMode);
+  elements.answerInputEl.value = "";
+  elements.answerInputEl.disabled = true;
+  elements.checkBtn.disabled = true;
+  elements.showAnswerBtn.disabled = true;
+  elements.prevBtn.disabled = state.history.length === 0;
+  elements.nextBtn.disabled = true;
+  elements.nextBtn.textContent = "다음 문제";
+  hideResult(elements);
 }

@@ -4,6 +4,7 @@ export function getElements() {
 
     modeEl: document.getElementById("mode"),
     countFilterEl: document.getElementById("countFilter"),
+    reviewModeEl: document.getElementById("reviewMode"),
     showCategoryEl: document.getElementById("showCategory"),
     autoNextEl: document.getElementById("autoNext"),
 

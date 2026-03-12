@@ -8,6 +8,7 @@ import {
   renderCountFilterOptions,
   setActivePartButton,
   setPartButtonState,
+  syncReviewControls,
 } from "./app/part-ui.js";
 import { getElements } from "./dom.js";
 import {
@@ -46,10 +47,26 @@ async function init() {
     applySessionControls(elements, savedSession);
     setActivePartButton(elements, activePart);
     renderCountFilterOptions(elements, datasets[activePart].length);
+    syncLearningControls(
+      elements,
+      datasets[activePart].length,
+      savedSession?.quizState ?? {
+        reviewMode: elements.reviewModeEl.value,
+        wrongQuestionNos: [],
+      }
+    );
 
     const app = new QuizApp(elements, datasets[activePart], {
-      onStateChange: (quizState) =>
-        saveLearningSession(buildLearningSession(activePartRef.current, elements, quizState)),
+      onStateChange: (quizState) => {
+        syncLearningControls(
+          elements,
+          datasets[activePartRef.current].length,
+          quizState
+        );
+        saveLearningSession(
+          buildLearningSession(activePartRef.current, elements, quizState)
+        );
+      },
     });
     const activePartRef = { current: activePart };
 
@@ -79,6 +96,7 @@ function bindPartButtons(elements, partConfigs, datasets, app, activePartRef) {
       setActivePartButton(elements, part);
       renderCountFilterOptions(elements, datasets[part].length);
       app.setSentences(datasets[part]);
+      syncLearningControls(elements, datasets[part].length, app.getPersistedState());
       saveLearningSession(buildLearningSession(part, elements, app.getPersistedState()));
     });
   }
@@ -106,6 +124,10 @@ function applySessionControls(elements, savedSession) {
   if (savedSession.autoNext !== undefined) {
     elements.autoNextEl.checked = savedSession.autoNext;
   }
+
+  if (savedSession.reviewMode) {
+    elements.reviewModeEl.value = savedSession.reviewMode;
+  }
 }
 
 function restoreLearningSession(elements, datasets, app, activePart, savedSession) {
@@ -130,10 +152,21 @@ function buildLearningSession(activePart, elements, quizState) {
     activePart,
     mode: elements.modeEl.value,
     countFilter: elements.countFilterEl.value,
+    reviewMode: elements.reviewModeEl.value,
     showCategory: elements.showCategoryEl.checked,
     autoNext: elements.autoNextEl.checked,
     quizState,
   };
+}
+
+function syncLearningControls(elements, totalCount, quizState) {
+  syncReviewControls(
+    elements,
+    totalCount,
+    quizState.reviewMode ?? elements.reviewModeEl.value,
+    quizState.wrongQuestionNos?.length ?? 0,
+    elements.countFilterEl.value
+  );
 }
 
 init();
