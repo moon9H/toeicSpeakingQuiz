@@ -14,13 +14,20 @@
   <div class="wrap">
     <div class="app">
       <header class="header">
-        <h1>토익 스피킹 만능문장 퀴즈</h1>
-        <p>
-          한글 뜻을 보고 영어 문장을 직접 입력해 보세요.
-          대소문자, 스마트 따옴표, 문장부호, 여분 공백 차이는 자동으로 보정합니다.
-        </p>
+        <div class="header-top">
+          <div class="header-text">
+            <h1>토익 스피킹 만능문장 퀴즈</h1>
+            <p>
+              한글 뜻을 보고 영어 문장을 직접 입력해 보세요.
+              대소문자, 스마트 따옴표, 문장부호, 여분 공백 차이는 자동으로 보정합니다.
+            </p>
+          </div>
+          <div class="part-tabs">
+            <button class="part-tab active" id="part3Btn">Part 3</button>
+            <button class="part-tab" id="part5Btn">Part 5</button>
+          </div>
+        </div>
       </header>
-
       <main class="body">
         <section class="topbar">
           <div class="pill-group">
@@ -45,12 +52,6 @@
           <div class="setting-card">
             <label for="countFilter">출제 범위</label>
             <select id="countFilter">
-              <option value="all">전체 50문장</option>
-              <option value="1-10">1~10번</option>
-              <option value="11-20">11~20번</option>
-              <option value="21-30">21~30번</option>
-              <option value="31-40">31~40번</option>
-              <option value="41-50">41~50번</option>
             </select>
           </div>
 
