@@ -11,16 +11,20 @@ export class QuizApp {
 
     this.currentIndex = 0;
     this.currentQuestion = null;
+    this.currentQuestionResult = null;
 
     this.correctCount = 0;
     this.wrongCount = 0;
+    this.autoNextTimeoutId = null;
   }
 
   setSentences(sentences) {
+    this.clearPendingAutoNext();
     this.sentences = sentences;
     this.filteredSentences = [...sentences];
     this.currentIndex = 0;
     this.currentQuestion = null;
+    this.currentQuestionResult = null;
     this.correctCount = 0;
     this.wrongCount = 0;
     this.randomQueue = [];
@@ -50,6 +54,7 @@ export class QuizApp {
   }
 
   applyFilter() {
+    this.clearPendingAutoNext();
     const [start, end] = getFilterRange(
       this.elements.countFilterEl.value,
       this.sentences.length
@@ -70,6 +75,8 @@ export class QuizApp {
   }
 
   pickQuestion(saveHistory = true) {
+    this.clearPendingAutoNext();
+
     if (this.filteredSentences.length === 0) return;
 
     if (saveHistory && this.currentQuestion) {
@@ -107,6 +114,8 @@ export class QuizApp {
   }
 
   prevQuestion() {
+    this.clearPendingAutoNext();
+
     if (this.history.length === 0) return;
 
     const prevState = this.history.pop();
@@ -116,6 +125,33 @@ export class QuizApp {
 
     this.renderQuestion();
     this.updateStats();
+  }
+
+  clearPendingAutoNext() {
+    if (this.autoNextTimeoutId) {
+      clearTimeout(this.autoNextTimeoutId);
+      this.autoNextTimeoutId = null;
+    }
+  }
+
+  updateScore(nextResult) {
+    if (this.currentQuestionResult === nextResult) {
+      return;
+    }
+
+    if (this.currentQuestionResult === "correct") {
+      this.correctCount--;
+    } else if (this.currentQuestionResult === "wrong") {
+      this.wrongCount--;
+    }
+
+    if (nextResult === "correct") {
+      this.correctCount++;
+    } else if (nextResult === "wrong") {
+      this.wrongCount++;
+    }
+
+    this.currentQuestionResult = nextResult;
   }
 
   shuffleArray(array) {
@@ -129,6 +165,8 @@ export class QuizApp {
 
   renderQuestion() {
     if (!this.currentQuestion) return;
+
+    this.currentQuestionResult = null;
 
     const categoryText = this.elements.showCategoryEl.checked
       ? ` ${this.currentQuestion.category}`
@@ -194,7 +232,7 @@ export class QuizApp {
     const normalizedAnswer = normalizeText(this.currentQuestion.english);
 
     if (normalizedUser === normalizedAnswer) {
-      this.correctCount++;
+      this.updateScore("correct");
       this.updateStats();
 
       this.showResult(
@@ -205,13 +243,17 @@ export class QuizApp {
       );
 
       if (this.elements.autoNextEl.checked) {
-        setTimeout(() => this.pickQuestion(), 700);
+        this.clearPendingAutoNext();
+        this.autoNextTimeoutId = setTimeout(() => {
+          this.autoNextTimeoutId = null;
+          this.pickQuestion();
+        }, 700);
       }
 
       return;
     }
 
-    this.wrongCount++;
+    this.updateScore("wrong");
     this.updateStats();
 
     this.showResult(
@@ -234,8 +276,10 @@ export class QuizApp {
   }
 
   resetStats() {
+    this.clearPendingAutoNext();
     this.correctCount = 0;
     this.wrongCount = 0;
+    this.currentQuestionResult = null;
 
     this.hideResult();
     this.updateStats();
