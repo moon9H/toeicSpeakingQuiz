@@ -1,6 +1,6 @@
-import { QuizApp } from "./quiz.js";
+import { QuizApp } from "./quiz/quiz.js";
 import { getElements } from "./dom.js";
-import { buildRangeOptions } from "./utils.js";
+import { buildRangeOptions } from "./utils/range-utils.js";
 
 async function loadJson(path) {
   const response = await fetch(path);
