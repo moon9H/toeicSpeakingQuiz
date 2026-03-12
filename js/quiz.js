@@ -8,6 +8,7 @@ export class QuizApp {
     this.filteredSentences = [...sentences];
     this.randomQueue = [];
     this.history = [];
+    this.future = [];
 
     this.currentIndex = 0;
     this.currentQuestion = null;
@@ -29,6 +30,7 @@ export class QuizApp {
     this.wrongCount = 0;
     this.randomQueue = [];
     this.history = [];
+    this.future = [];
 
     this.hideResult();
     this.applyFilter();
@@ -38,7 +40,7 @@ export class QuizApp {
     this.elements.checkBtn.addEventListener("click", () => this.checkAnswer());
     this.elements.showAnswerBtn.addEventListener("click", () => this.revealAnswer());
     this.elements.prevBtn.addEventListener("click", () => {this.prevQuestion();});
-    this.elements.nextBtn.addEventListener("click", () => this.pickQuestion());
+    this.elements.nextBtn.addEventListener("click", () => this.nextQuestion());
     this.elements.resetStatsBtn.addEventListener("click", () => this.resetStats());
 
     this.elements.modeEl.addEventListener("change", () => this.applyFilter());
@@ -67,6 +69,7 @@ export class QuizApp {
     this.currentIndex = 0;
     this.randomQueue = [];
     this.history = [];
+    this.future = [];
     this.correctCount = 0;
     this.wrongCount = 0;
 
@@ -80,11 +83,11 @@ export class QuizApp {
     if (this.filteredSentences.length === 0) return;
 
     if (saveHistory && this.currentQuestion) {
-      this.history.push({
-        currentQuestion: this.currentQuestion,
-        currentIndex: this.currentIndex,
-        randomQueue: [...this.randomQueue]
-      });
+      this.history.push(this.captureCurrentState());
+    }
+
+    if (saveHistory) {
+      this.future = [];
     }
 
     if (this.elements.modeEl.value === "random") {
@@ -118,13 +121,22 @@ export class QuizApp {
 
     if (this.history.length === 0) return;
 
+    this.future.push(this.captureCurrentState());
     const prevState = this.history.pop();
-    this.currentQuestion = prevState.currentQuestion;
-    this.currentIndex = prevState.currentIndex;
-    this.randomQueue = [...prevState.randomQueue];
+    this.restoreState(prevState);
+  }
 
-    this.renderQuestion();
-    this.updateStats();
+  nextQuestion() {
+    this.clearPendingAutoNext();
+
+    if (this.future.length > 0 && this.currentQuestion) {
+      this.history.push(this.captureCurrentState());
+      const nextState = this.future.pop();
+      this.restoreState(nextState);
+      return;
+    }
+
+    this.pickQuestion();
   }
 
   clearPendingAutoNext() {
@@ -154,6 +166,38 @@ export class QuizApp {
     this.currentQuestionResult = nextResult;
   }
 
+  captureCurrentState() {
+    return {
+      currentQuestion: this.currentQuestion,
+      currentIndex: this.currentIndex,
+      currentQuestionResult: this.currentQuestionResult,
+      randomQueue: [...this.randomQueue],
+      correctCount: this.correctCount,
+      wrongCount: this.wrongCount,
+      answerInputValue: this.elements.answerInputEl.value,
+      resultClassName: this.elements.resultBoxEl.className,
+      resultTitle: this.elements.resultTitleEl.textContent,
+      resultBodyHtml: this.elements.resultBodyEl.innerHTML,
+    };
+  }
+
+  restoreState(state) {
+    this.currentQuestion = state.currentQuestion;
+    this.currentIndex = state.currentIndex;
+    this.currentQuestionResult = state.currentQuestionResult;
+    this.randomQueue = [...state.randomQueue];
+    this.correctCount = state.correctCount;
+    this.wrongCount = state.wrongCount;
+
+    this.renderQuestion(false);
+    this.elements.answerInputEl.value = state.answerInputValue;
+    this.elements.resultBoxEl.className = state.resultClassName;
+    this.elements.resultTitleEl.textContent = state.resultTitle;
+    this.elements.resultBodyEl.innerHTML = state.resultBodyHtml;
+    this.updateStats();
+    this.elements.answerInputEl.focus();
+  }
+
   shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -163,10 +207,8 @@ export class QuizApp {
     return array;
   }
 
-  renderQuestion() {
+  renderQuestion(resetView = true) {
     if (!this.currentQuestion) return;
-
-    this.currentQuestionResult = null;
 
     const categoryText = this.elements.showCategoryEl.checked
       ? ` ${this.currentQuestion.category}`
@@ -179,12 +221,16 @@ export class QuizApp {
     this.elements.hintEl.textContent =
       `총 ${this.filteredSentences.length}문장 범위에서 출제 중`;
 
-    this.elements.answerInputEl.value = "";
-    this.elements.answerInputEl.focus();
-
     this.elements.prevBtn.disabled = this.history.length === 0;
+    this.elements.nextBtn.textContent = this.future.length > 0 ? "다음으로" : "다음 문제";
 
-    this.hideResult();
+    if (resetView) {
+      this.currentQuestionResult = null;
+      this.elements.answerInputEl.value = "";
+      this.hideResult();
+    }
+
+    this.elements.answerInputEl.focus();
   }
 
   updateStats() {
@@ -216,6 +262,8 @@ export class QuizApp {
 
   checkAnswer() {
     if (!this.currentQuestion) return;
+
+    this.future = [];
 
     const userAnswer = this.elements.answerInputEl.value.trim();
 
@@ -268,6 +316,8 @@ export class QuizApp {
   revealAnswer() {
     if (!this.currentQuestion) return;
 
+    this.future = [];
+
     this.showResult(
       "wrong",
       "정답 보기",
@@ -280,6 +330,7 @@ export class QuizApp {
     this.correctCount = 0;
     this.wrongCount = 0;
     this.currentQuestionResult = null;
+    this.future = [];
 
     this.hideResult();
     this.updateStats();
