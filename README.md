@@ -29,7 +29,7 @@
 
 ---
 
-# 🔗 Live Demo
+# 🔗 Live
 
 👉 https://moon9H.github.io/toeicSpeakingQuiz/
 
@@ -44,8 +44,6 @@
 > **한글 뜻을 보고 영어 문장을 직접 타이핑하는 방식**
 
 으로 학습할 수 있는 웹앱을 만들었습니다.
-
-현재 v1.1에서는 **Part 3 / Part 5 데이터셋 전환 기능**까지 지원합니다.
 
 ---
 
