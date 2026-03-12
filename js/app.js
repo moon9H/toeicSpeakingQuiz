@@ -20,6 +20,11 @@ async function init() {
   const elements = getElements();
   const partConfigs = getPartConfigs(elements);
   const savedSession = loadLearningSession();
+  const controlStateRef = {
+    standardMode: savedSession?.standardMode ?? savedSession?.mode ?? elements.modeEl.value,
+    standardCountFilter:
+      savedSession?.standardCountFilter ?? savedSession?.countFilter ?? "all",
+  };
 
   try {
     const datasets = await loadPartDatasets(
@@ -53,7 +58,8 @@ async function init() {
       savedSession?.quizState ?? {
         reviewMode: elements.reviewModeEl.value,
         wrongQuestionNos: [],
-      }
+      },
+      controlStateRef
     );
 
     const app = new QuizApp(elements, datasets[activePart], {
@@ -61,16 +67,29 @@ async function init() {
         syncLearningControls(
           elements,
           datasets[activePartRef.current].length,
-          quizState
+          quizState,
+          controlStateRef
         );
         saveLearningSession(
-          buildLearningSession(activePartRef.current, elements, quizState)
+          buildLearningSession(
+            activePartRef.current,
+            elements,
+            quizState,
+            controlStateRef
+          )
         );
       },
     });
     const activePartRef = { current: activePart };
 
-    bindPartButtons(elements, partConfigs, datasets, app, activePartRef);
+    bindPartButtons(
+      elements,
+      partConfigs,
+      datasets,
+      app,
+      activePartRef,
+      controlStateRef
+    );
 
     app.bindEvents();
 
@@ -87,17 +106,32 @@ async function init() {
   }
 }
 
-function bindPartButtons(elements, partConfigs, datasets, app, activePartRef) {
+function bindPartButtons(
+  elements,
+  partConfigs,
+  datasets,
+  app,
+  activePartRef,
+  controlStateRef
+) {
   for (const [part, config] of Object.entries(partConfigs)) {
     if (!datasets[part]) continue;
 
     config.button.addEventListener("click", () => {
       activePartRef.current = part;
+      elements.reviewModeEl.value = "all";
       setActivePartButton(elements, part);
       renderCountFilterOptions(elements, datasets[part].length);
       app.setSentences(datasets[part]);
-      syncLearningControls(elements, datasets[part].length, app.getPersistedState());
-      saveLearningSession(buildLearningSession(part, elements, app.getPersistedState()));
+      syncLearningControls(
+        elements,
+        datasets[part].length,
+        app.getPersistedState(),
+        controlStateRef
+      );
+      saveLearningSession(
+        buildLearningSession(part, elements, app.getPersistedState(), controlStateRef)
+      );
     });
   }
 }
@@ -147,25 +181,41 @@ function restoreLearningSession(elements, datasets, app, activePart, savedSessio
   app.restorePersistedState(savedSession.quizState);
 }
 
-function buildLearningSession(activePart, elements, quizState) {
+function buildLearningSession(activePart, elements, quizState, controlStateRef) {
   return {
     activePart,
     mode: elements.modeEl.value,
     countFilter: elements.countFilterEl.value,
     reviewMode: elements.reviewModeEl.value,
+    standardMode: controlStateRef.standardMode,
+    standardCountFilter: controlStateRef.standardCountFilter,
     showCategory: elements.showCategoryEl.checked,
     autoNext: elements.autoNextEl.checked,
     quizState,
   };
 }
 
-function syncLearningControls(elements, totalCount, quizState) {
+function syncLearningControls(elements, totalCount, quizState, controlStateRef) {
+  const reviewMode = quizState.reviewMode ?? elements.reviewModeEl.value;
+
+  if (
+    reviewMode === "all" &&
+    !elements.modeEl.disabled &&
+    !elements.countFilterEl.disabled
+  ) {
+    controlStateRef.standardMode = elements.modeEl.value;
+    controlStateRef.standardCountFilter = elements.countFilterEl.value;
+  }
+
   syncReviewControls(
     elements,
     totalCount,
-    quizState.reviewMode ?? elements.reviewModeEl.value,
+    reviewMode,
     quizState.wrongQuestionNos?.length ?? 0,
-    elements.countFilterEl.value
+    {
+      mode: controlStateRef.standardMode,
+      countFilter: controlStateRef.standardCountFilter,
+    }
   );
 }
 

@@ -38,7 +38,10 @@ export function syncReviewControls(
   totalCount,
   reviewMode,
   wrongCount,
-  selectedCountFilter = elements.countFilterEl.value
+  standardSelections = {
+    mode: elements.modeEl.value,
+    countFilter: elements.countFilterEl.value,
+  }
 ) {
   const wrongOption = Array.from(elements.reviewModeEl.options).find(
     (option) => option.value === "wrong"
@@ -60,9 +63,12 @@ export function syncReviewControls(
 
   elements.modeEl.disabled = false;
   elements.countFilterEl.disabled = false;
+  elements.modeEl.value = standardSelections.mode;
   renderCountFilterOptions(elements, totalCount);
   const hasSelectedFilter = Array.from(elements.countFilterEl.options).some(
-    (option) => option.value === selectedCountFilter
+    (option) => option.value === standardSelections.countFilter
   );
-  elements.countFilterEl.value = hasSelectedFilter ? selectedCountFilter : "all";
+  elements.countFilterEl.value = hasSelectedFilter
+    ? standardSelections.countFilter
+    : "all";
 }

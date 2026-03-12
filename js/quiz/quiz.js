@@ -247,12 +247,7 @@ export class QuizApp {
     clearWrongQuestions(this.state);
     this.elements.reviewModeEl.value = "all";
     clearFuture(this.state);
-
     this.applyFilter();
-    this.hideResult();
-    updateStats(this.elements, this.state);
-    this.elements.answerInputEl.focus();
-    this.notifyStateChange();
   }
 
   getPersistedState() {
