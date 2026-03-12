@@ -16,7 +16,7 @@
 <img src="https://img.shields.io/badge/CSS-3-blue">
 <img src="https://img.shields.io/badge/JavaScript-ES6-yellow">
 <img src="https://img.shields.io/badge/Data-JSON-green">
-<img src="https://img.shields.io/badge/version-v1.2-brightgreen">
+<img src="https://img.shields.io/badge/version-v1.3-brightgreen">
 </p>
 
 ---
@@ -70,8 +70,10 @@
 - 10문장 단위 범위 선택 가능
 
 ### 🔀 Part 전환 지원
-- Part 3 문장 학습
-- Part 5 문장 학습
+- Part 2 *(데이터 준비 예정)*
+- Part 3
+- Part 4 *(데이터 준비 예정)*
+- Part 5
 
 ### 🏷 카테고리 표시 옵션
 - 문제 번호와 함께 카테고리 표시 가능
@@ -88,6 +90,11 @@
 - 정답 수
 - 오답 수
 - 정확도
+
+### ⌨️ 빠른 입력 UX
+
+- **Enter → 채점**
+- **Shift + Enter → 줄바꿈**
 
 ---
 
@@ -122,7 +129,8 @@ toeic-speaking-quiz
 │   └── utils.js
 │
 └── data
-    └── sentences.json
+    └── sentences_part3.json
+    └── sentences_part5.json
 ```
 
 ---
@@ -132,7 +140,7 @@ toeic-speaking-quiz
 - **퀴즈 동작 구조**
 
 ```
-sentences.json / sentences2.json
+        sentences_partX.json
                 ↓
          app.js (데이터 로드)
                 ↓
@@ -154,6 +162,20 @@ sentences.json / sentences2.json
 ---
 
 # 📦 Version History
+
+<details>
+<summary><strong>v1.3</strong></summary>
+
+### ✨ Added
+- Enter 키로 채점
+- Shift + Enter 줄바꿈 입력 지원
+- Part 2 / Part 4 탭 UI 추가
+- 추후 데이터 추가 시 바로 확장 가능한 파트 구조 적용
+
+### 🔧 Refactor
+- 데이터 JSON 파일명 정리
+
+</details>
 
 <details>
 <summary><strong>v1.2</strong></summary>
