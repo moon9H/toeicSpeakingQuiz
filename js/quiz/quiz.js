@@ -23,10 +23,11 @@ import {
 } from "./quiz-state.js";
 
 export class QuizApp {
-  constructor(elements, sentences) {
+  constructor(elements, sentences, options = {}) {
     this.elements = elements;
     this.state = createQuizState(sentences);
     this.autoNextTimeoutId = null;
+    this.onStateChange = options.onStateChange ?? (() => {});
   }
 
   setSentences(sentences) {
@@ -45,7 +46,11 @@ export class QuizApp {
 
     this.elements.modeEl.addEventListener("change", () => this.applyFilter());
     this.elements.countFilterEl.addEventListener("change", () => this.applyFilter());
-    this.elements.showCategoryEl.addEventListener("change", () => this.renderQuestion());
+    this.elements.showCategoryEl.addEventListener("change", () => {
+      this.renderQuestion(false);
+      this.notifyStateChange();
+    });
+    this.elements.autoNextEl.addEventListener("change", () => this.notifyStateChange());
 
     this.elements.answerInputEl.addEventListener("keydown", (event) => {
       if (event.key === "Enter" && !event.shiftKey) {
@@ -53,6 +58,7 @@ export class QuizApp {
         this.checkAnswer();
       }
     });
+    this.elements.answerInputEl.addEventListener("input", () => this.notifyStateChange());
   }
 
   applyFilter() {
@@ -60,6 +66,7 @@ export class QuizApp {
     applyFilterToState(this.state, this.elements.countFilterEl.value);
     this.pickQuestion(false);
     updateStats(this.elements, this.state);
+    this.notifyStateChange();
   }
 
   pickQuestion(saveHistory = true) {
@@ -78,6 +85,7 @@ export class QuizApp {
     pickNextQuestion(this.state, this.elements.modeEl.value);
     this.renderQuestion();
     updateStats(this.elements, this.state);
+    this.notifyStateChange();
   }
 
   prevQuestion() {
@@ -88,6 +96,7 @@ export class QuizApp {
     pushFuture(this.state, this.captureCurrentState());
     const prevState = popHistory(this.state);
     this.restoreState(prevState);
+    this.notifyStateChange();
   }
 
   nextQuestion() {
@@ -97,6 +106,7 @@ export class QuizApp {
       pushHistory(this.state, this.captureCurrentState());
       const nextState = popFuture(this.state);
       this.restoreState(nextState);
+      this.notifyStateChange();
       return;
     }
 
@@ -153,6 +163,7 @@ export class QuizApp {
         "입력된 답이 없습니다",
         "문장을 입력하세요."
       );
+      this.notifyStateChange();
       return;
     }
 
@@ -180,6 +191,7 @@ export class QuizApp {
         }, 700);
       }
 
+      this.notifyStateChange();
       return;
     }
 
@@ -194,6 +206,7 @@ export class QuizApp {
        <div class="sub"><strong>내 답안</strong><br>${escapeHtml(userAnswer)}</div>
        <div class="answer-box"><strong>정답</strong><br>${this.state.currentQuestion.english}</div>`
     );
+    this.notifyStateChange();
   }
 
   revealAnswer() {
@@ -206,6 +219,7 @@ export class QuizApp {
       "정답 보기",
       `<div class="answer-box">${this.state.currentQuestion.english}</div>`
     );
+    this.notifyStateChange();
   }
 
   resetStats() {
@@ -218,5 +232,100 @@ export class QuizApp {
     this.hideResult();
     updateStats(this.elements, this.state);
     this.elements.answerInputEl.focus();
+    this.notifyStateChange();
+  }
+
+  getPersistedState() {
+    return {
+      currentIndex: this.state.currentIndex,
+      currentQuestionNo: this.state.currentQuestion?.no ?? null,
+      currentQuestionResult: this.state.currentQuestionResult,
+      randomQueueNos: this.state.randomQueue.map((item) => item.no),
+      correctCount: this.state.correctCount,
+      wrongCount: this.state.wrongCount,
+      history: this.state.history.map((snapshot) => this.serializeSnapshot(snapshot)),
+      future: this.state.future.map((snapshot) => this.serializeSnapshot(snapshot)),
+      viewState: captureViewState(this.elements),
+    };
+  }
+
+  restorePersistedState(savedState) {
+    if (!savedState) return false;
+
+    this.clearPendingAutoNext();
+
+    this.state.currentIndex = savedState.currentIndex ?? 0;
+    this.state.currentQuestion = this.findQuestionByNo(savedState.currentQuestionNo);
+    this.state.currentQuestionResult = savedState.currentQuestionResult ?? null;
+    this.state.randomQueue = this.mapQuestionNos(savedState.randomQueueNos);
+    this.state.correctCount = savedState.correctCount ?? 0;
+    this.state.wrongCount = savedState.wrongCount ?? 0;
+    this.state.history = (savedState.history ?? [])
+      .map((snapshot) => this.deserializeSnapshot(snapshot))
+      .filter(Boolean);
+    this.state.future = (savedState.future ?? [])
+      .map((snapshot) => this.deserializeSnapshot(snapshot))
+      .filter(Boolean);
+
+    if (!this.state.currentQuestion) {
+      this.pickQuestion(false);
+      return true;
+    }
+
+    this.renderQuestion(false);
+    restoreViewState(this.elements, savedState.viewState ?? captureViewState(this.elements));
+    updateStats(this.elements, this.state);
+    this.notifyStateChange();
+    return true;
+  }
+
+  notifyStateChange() {
+    this.onStateChange(this.getPersistedState());
+  }
+
+  serializeSnapshot(snapshot) {
+    return {
+      currentQuestionNo: snapshot.currentQuestion?.no ?? null,
+      currentIndex: snapshot.currentIndex,
+      currentQuestionResult: snapshot.currentQuestionResult,
+      randomQueueNos: snapshot.randomQueue.map((item) => item.no),
+      correctCount: snapshot.correctCount,
+      wrongCount: snapshot.wrongCount,
+      viewState: snapshot.viewState,
+    };
+  }
+
+  deserializeSnapshot(snapshot) {
+    const currentQuestion = this.findQuestionByNo(snapshot.currentQuestionNo);
+
+    if (!currentQuestion) {
+      return null;
+    }
+
+    return {
+      currentQuestion,
+      currentIndex: snapshot.currentIndex ?? 0,
+      currentQuestionResult: snapshot.currentQuestionResult ?? null,
+      randomQueue: this.mapQuestionNos(snapshot.randomQueueNos),
+      correctCount: snapshot.correctCount ?? 0,
+      wrongCount: snapshot.wrongCount ?? 0,
+      viewState: snapshot.viewState ?? {
+        answerInputValue: "",
+        resultClassName: "result",
+        resultTitle: "",
+        resultBodyHtml: "",
+      },
+    };
+  }
+
+  mapQuestionNos(questionNos = []) {
+    return questionNos
+      .map((no) => this.findQuestionByNo(no))
+      .filter(Boolean);
+  }
+
+  findQuestionByNo(no) {
+    if (!no) return null;
+    return this.state.sentences.find((item) => item.no === no) ?? null;
   }
 }

@@ -10,10 +10,15 @@ import {
   setPartButtonState,
 } from "./app/part-ui.js";
 import { getElements } from "./dom.js";
+import {
+  loadLearningSession,
+  saveLearningSession,
+} from "./storage/learning-session.js";
 
 async function init() {
   const elements = getElements();
   const partConfigs = getPartConfigs(elements);
+  const savedSession = loadLearningSession();
 
   try {
     const datasets = await loadPartDatasets(
@@ -32,20 +37,31 @@ async function init() {
       }
     );
 
-    const defaultPart = getDefaultPart(datasets);
+    const activePart = getInitialPart(datasets, savedSession);
 
-    if (!defaultPart) {
+    if (!activePart) {
       throw new Error("불러올 수 있는 문장 데이터가 없습니다.");
     }
 
-    setActivePartButton(elements, defaultPart);
-    renderCountFilterOptions(elements, datasets[defaultPart].length);
+    applySessionControls(elements, savedSession);
+    setActivePartButton(elements, activePart);
+    renderCountFilterOptions(elements, datasets[activePart].length);
 
-    const app = new QuizApp(elements, datasets[defaultPart]);
-    bindPartButtons(elements, partConfigs, datasets, app);
+    const app = new QuizApp(elements, datasets[activePart], {
+      onStateChange: (quizState) =>
+        saveLearningSession(buildLearningSession(activePartRef.current, elements, quizState)),
+    });
+    const activePartRef = { current: activePart };
+
+    bindPartButtons(elements, partConfigs, datasets, app, activePartRef);
 
     app.bindEvents();
-    app.applyFilter();
+
+    if (savedSession && savedSession.activePart === activePart) {
+      restoreLearningSession(elements, datasets, app, activePart, savedSession);
+    } else {
+      app.applyFilter();
+    }
   } catch (error) {
     console.error(error);
     elements.questionTitleEl.textContent = "오류";
@@ -54,16 +70,70 @@ async function init() {
   }
 }
 
-function bindPartButtons(elements, partConfigs, datasets, app) {
+function bindPartButtons(elements, partConfigs, datasets, app, activePartRef) {
   for (const [part, config] of Object.entries(partConfigs)) {
     if (!datasets[part]) continue;
 
     config.button.addEventListener("click", () => {
+      activePartRef.current = part;
       setActivePartButton(elements, part);
       renderCountFilterOptions(elements, datasets[part].length);
       app.setSentences(datasets[part]);
+      saveLearningSession(buildLearningSession(part, elements, app.getPersistedState()));
     });
   }
+}
+
+function getInitialPart(datasets, savedSession) {
+  if (savedSession?.activePart && datasets[savedSession.activePart]) {
+    return savedSession.activePart;
+  }
+
+  return getDefaultPart(datasets);
+}
+
+function applySessionControls(elements, savedSession) {
+  if (!savedSession) return;
+
+  if (savedSession.mode) {
+    elements.modeEl.value = savedSession.mode;
+  }
+
+  if (savedSession.showCategory !== undefined) {
+    elements.showCategoryEl.checked = savedSession.showCategory;
+  }
+
+  if (savedSession.autoNext !== undefined) {
+    elements.autoNextEl.checked = savedSession.autoNext;
+  }
+}
+
+function restoreLearningSession(elements, datasets, app, activePart, savedSession) {
+  const dataset = datasets[activePart];
+  const desiredFilter = savedSession.countFilter;
+  const hasDesiredFilter = Array.from(elements.countFilterEl.options).some(
+    (option) => option.value === desiredFilter
+  );
+
+  elements.countFilterEl.value = hasDesiredFilter ? desiredFilter : "all";
+  app.applyFilter();
+
+  if (!savedSession.quizState) {
+    return;
+  }
+
+  app.restorePersistedState(savedSession.quizState);
+}
+
+function buildLearningSession(activePart, elements, quizState) {
+  return {
+    activePart,
+    mode: elements.modeEl.value,
+    countFilter: elements.countFilterEl.value,
+    showCategory: elements.showCategoryEl.checked,
+    autoNext: elements.autoNextEl.checked,
+    quizState,
+  };
 }
 
 init();
