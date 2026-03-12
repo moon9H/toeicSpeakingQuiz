@@ -158,6 +158,18 @@ sentences.json / sentences2.json
 # 📦 Version History
 
 <details>
+<summary><strong>v1.2</strong></summary>
+
+### ✨ Added
+- 이전 문제 버튼 추가
+- 직전 문제 상태 복원 기능
+
+### 🎨 UI
+- 이전 버튼 하늘색 네비게이션 스타일 적용
+
+</details>
+
+<details>
 <summary><strong>v1.1</strong></summary>
 
 ### ✨ Added
