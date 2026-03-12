@@ -1,14 +1,13 @@
 export function normalizeText(text) {
-
   return text
     .toLowerCase()
     .replace(/[’‘`]/g, "'")
     .replace(/[“”]/g, '"')
-    .replace(/'/g, "")        // apostrophe 제거
-    .replace(/[.,!?]/g, "")
+    .replace(/'/g, "")
+    .replace(/"/g, "")
+    .replace(/[.,!?;:()\-]/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-
 }
 
 export function escapeHtml(text) {
@@ -42,4 +41,15 @@ export function buildRangeOptions(totalCount, step = 10) {
   }
 
   return options;
+}
+
+export function getAnswerComparison(userAnswer, answer) {
+  const normalizedUser = normalizeText(userAnswer);
+  const normalizedAnswer = normalizeText(answer);
+
+  return {
+    normalizedUser,
+    normalizedAnswer,
+    isMatch: normalizedUser === normalizedAnswer,
+  };
 }

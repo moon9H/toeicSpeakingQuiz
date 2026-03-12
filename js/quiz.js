@@ -1,4 +1,8 @@
-import { normalizeText, escapeHtml, getFilterRange } from "./utils.js";
+import {
+  getAnswerComparison,
+  escapeHtml,
+  getFilterRange,
+} from "./utils.js";
 
 export class QuizApp {
   constructor(elements, sentences) {
@@ -276,10 +280,12 @@ export class QuizApp {
       return;
     }
 
-    const normalizedUser = normalizeText(userAnswer);
-    const normalizedAnswer = normalizeText(this.currentQuestion.english);
+    const comparison = getAnswerComparison(
+      userAnswer,
+      this.currentQuestion.english
+    );
 
-    if (normalizedUser === normalizedAnswer) {
+    if (comparison.isMatch) {
       this.updateScore("correct");
       this.updateStats();
 
@@ -307,7 +313,8 @@ export class QuizApp {
     this.showResult(
       "wrong",
       "오답입니다",
-      `<div>입력한 문장과 정답이 다릅니다.</div>
+      `<div>핵심 단어 또는 문장 순서가 정답과 다릅니다.</div>
+       <div class="sub">대소문자, 공백, apostrophe, 따옴표, 기본 문장부호 차이는 자동으로 보정됩니다.</div>
        <div class="sub"><strong>내 답안</strong><br>${escapeHtml(userAnswer)}</div>
        <div class="answer-box"><strong>정답</strong><br>${this.currentQuestion.english}</div>`
     );
