@@ -16,7 +16,7 @@
 <img src="https://img.shields.io/badge/CSS-3-blue">
 <img src="https://img.shields.io/badge/JavaScript-ES6-yellow">
 <img src="https://img.shields.io/badge/Data-JSON-green">
-<img src="https://img.shields.io/badge/version-v1.1-brightgreen">
+<img src="https://img.shields.io/badge/version-v1.2-brightgreen">
 </p>
 
 ---
