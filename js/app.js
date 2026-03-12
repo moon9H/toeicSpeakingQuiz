@@ -23,9 +23,19 @@ function setActivePartButton(elements, activePart) {
   ["part2", "part3", "part4", "part5"].forEach((part) => {
     const button = elements[`${part}Btn`];
     if (button) {
-      button.classList.toggle("active", part === activePart);
+      button.classList.toggle("active", !button.disabled && part === activePart);
     }
   });
+}
+
+function setPartButtonState(button, { isReady, title }) {
+  if (!button) return;
+
+  button.disabled = !isReady;
+  button.classList.toggle("is-coming-soon", !isReady);
+  button.dataset.status = isReady ? "" : "준비 중";
+  button.title = title;
+  button.setAttribute("aria-disabled", String(!isReady));
 }
 
 function renderCountFilterOptions(elements, totalCount) {
@@ -70,6 +80,10 @@ async function init() {
       try {
         const data = await loadJson(config.path);
         datasets[part] = normalizeDataset(data);
+        setPartButtonState(config.button, {
+          isReady: true,
+          title: `${config.button.textContent} 문장 학습 시작`,
+        });
 
         config.button.addEventListener("click", () => {
           setActivePartButton(elements, part);
@@ -78,8 +92,10 @@ async function init() {
         });
       } catch (error) {
         datasets[part] = null;
-        config.button.disabled = true;
-        config.button.title = "데이터 준비 중";
+        setPartButtonState(config.button, {
+          isReady: false,
+          title: `${config.button.textContent} 데이터 준비 중`,
+        });
       }
     }
 
