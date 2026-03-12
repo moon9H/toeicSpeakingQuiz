@@ -1,4 +1,8 @@
-import { normalizeText, escapeHtml, getFilterRange } from "./utils.js";
+import {
+  getAnswerComparison,
+  escapeHtml,
+  getFilterRange,
+} from "./utils.js";
 
 export class QuizApp {
   constructor(elements, sentences) {
@@ -8,23 +12,29 @@ export class QuizApp {
     this.filteredSentences = [...sentences];
     this.randomQueue = [];
     this.history = [];
+    this.future = [];
 
     this.currentIndex = 0;
     this.currentQuestion = null;
+    this.currentQuestionResult = null;
 
     this.correctCount = 0;
     this.wrongCount = 0;
+    this.autoNextTimeoutId = null;
   }
 
   setSentences(sentences) {
+    this.clearPendingAutoNext();
     this.sentences = sentences;
     this.filteredSentences = [...sentences];
     this.currentIndex = 0;
     this.currentQuestion = null;
+    this.currentQuestionResult = null;
     this.correctCount = 0;
     this.wrongCount = 0;
     this.randomQueue = [];
     this.history = [];
+    this.future = [];
 
     this.hideResult();
     this.applyFilter();
@@ -34,7 +44,7 @@ export class QuizApp {
     this.elements.checkBtn.addEventListener("click", () => this.checkAnswer());
     this.elements.showAnswerBtn.addEventListener("click", () => this.revealAnswer());
     this.elements.prevBtn.addEventListener("click", () => {this.prevQuestion();});
-    this.elements.nextBtn.addEventListener("click", () => this.pickQuestion());
+    this.elements.nextBtn.addEventListener("click", () => this.nextQuestion());
     this.elements.resetStatsBtn.addEventListener("click", () => this.resetStats());
 
     this.elements.modeEl.addEventListener("change", () => this.applyFilter());
@@ -50,6 +60,7 @@ export class QuizApp {
   }
 
   applyFilter() {
+    this.clearPendingAutoNext();
     const [start, end] = getFilterRange(
       this.elements.countFilterEl.value,
       this.sentences.length
@@ -62,6 +73,7 @@ export class QuizApp {
     this.currentIndex = 0;
     this.randomQueue = [];
     this.history = [];
+    this.future = [];
     this.correctCount = 0;
     this.wrongCount = 0;
 
@@ -70,14 +82,16 @@ export class QuizApp {
   }
 
   pickQuestion(saveHistory = true) {
+    this.clearPendingAutoNext();
+
     if (this.filteredSentences.length === 0) return;
 
     if (saveHistory && this.currentQuestion) {
-      this.history.push({
-        currentQuestion: this.currentQuestion,
-        currentIndex: this.currentIndex,
-        randomQueue: [...this.randomQueue]
-      });
+      this.history.push(this.captureCurrentState());
+    }
+
+    if (saveHistory) {
+      this.future = [];
     }
 
     if (this.elements.modeEl.value === "random") {
@@ -107,15 +121,85 @@ export class QuizApp {
   }
 
   prevQuestion() {
+    this.clearPendingAutoNext();
+
     if (this.history.length === 0) return;
 
+    this.future.push(this.captureCurrentState());
     const prevState = this.history.pop();
-    this.currentQuestion = prevState.currentQuestion;
-    this.currentIndex = prevState.currentIndex;
-    this.randomQueue = [...prevState.randomQueue];
+    this.restoreState(prevState);
+  }
 
-    this.renderQuestion();
+  nextQuestion() {
+    this.clearPendingAutoNext();
+
+    if (this.future.length > 0 && this.currentQuestion) {
+      this.history.push(this.captureCurrentState());
+      const nextState = this.future.pop();
+      this.restoreState(nextState);
+      return;
+    }
+
+    this.pickQuestion();
+  }
+
+  clearPendingAutoNext() {
+    if (this.autoNextTimeoutId) {
+      clearTimeout(this.autoNextTimeoutId);
+      this.autoNextTimeoutId = null;
+    }
+  }
+
+  updateScore(nextResult) {
+    if (this.currentQuestionResult === nextResult) {
+      return;
+    }
+
+    if (this.currentQuestionResult === "correct") {
+      this.correctCount--;
+    } else if (this.currentQuestionResult === "wrong") {
+      this.wrongCount--;
+    }
+
+    if (nextResult === "correct") {
+      this.correctCount++;
+    } else if (nextResult === "wrong") {
+      this.wrongCount++;
+    }
+
+    this.currentQuestionResult = nextResult;
+  }
+
+  captureCurrentState() {
+    return {
+      currentQuestion: this.currentQuestion,
+      currentIndex: this.currentIndex,
+      currentQuestionResult: this.currentQuestionResult,
+      randomQueue: [...this.randomQueue],
+      correctCount: this.correctCount,
+      wrongCount: this.wrongCount,
+      answerInputValue: this.elements.answerInputEl.value,
+      resultClassName: this.elements.resultBoxEl.className,
+      resultTitle: this.elements.resultTitleEl.textContent,
+      resultBodyHtml: this.elements.resultBodyEl.innerHTML,
+    };
+  }
+
+  restoreState(state) {
+    this.currentQuestion = state.currentQuestion;
+    this.currentIndex = state.currentIndex;
+    this.currentQuestionResult = state.currentQuestionResult;
+    this.randomQueue = [...state.randomQueue];
+    this.correctCount = state.correctCount;
+    this.wrongCount = state.wrongCount;
+
+    this.renderQuestion(false);
+    this.elements.answerInputEl.value = state.answerInputValue;
+    this.elements.resultBoxEl.className = state.resultClassName;
+    this.elements.resultTitleEl.textContent = state.resultTitle;
+    this.elements.resultBodyEl.innerHTML = state.resultBodyHtml;
     this.updateStats();
+    this.elements.answerInputEl.focus();
   }
 
   shuffleArray(array) {
@@ -127,7 +211,7 @@ export class QuizApp {
     return array;
   }
 
-  renderQuestion() {
+  renderQuestion(resetView = true) {
     if (!this.currentQuestion) return;
 
     const categoryText = this.elements.showCategoryEl.checked
@@ -141,12 +225,16 @@ export class QuizApp {
     this.elements.hintEl.textContent =
       `총 ${this.filteredSentences.length}문장 범위에서 출제 중`;
 
-    this.elements.answerInputEl.value = "";
-    this.elements.answerInputEl.focus();
-
     this.elements.prevBtn.disabled = this.history.length === 0;
+    this.elements.nextBtn.textContent = this.future.length > 0 ? "다음으로" : "다음 문제";
 
-    this.hideResult();
+    if (resetView) {
+      this.currentQuestionResult = null;
+      this.elements.answerInputEl.value = "";
+      this.hideResult();
+    }
+
+    this.elements.answerInputEl.focus();
   }
 
   updateStats() {
@@ -179,6 +267,8 @@ export class QuizApp {
   checkAnswer() {
     if (!this.currentQuestion) return;
 
+    this.future = [];
+
     const userAnswer = this.elements.answerInputEl.value.trim();
 
     if (!userAnswer) {
@@ -190,11 +280,13 @@ export class QuizApp {
       return;
     }
 
-    const normalizedUser = normalizeText(userAnswer);
-    const normalizedAnswer = normalizeText(this.currentQuestion.english);
+    const comparison = getAnswerComparison(
+      userAnswer,
+      this.currentQuestion.english
+    );
 
-    if (normalizedUser === normalizedAnswer) {
-      this.correctCount++;
+    if (comparison.isMatch) {
+      this.updateScore("correct");
       this.updateStats();
 
       this.showResult(
@@ -205,19 +297,24 @@ export class QuizApp {
       );
 
       if (this.elements.autoNextEl.checked) {
-        setTimeout(() => this.pickQuestion(), 700);
+        this.clearPendingAutoNext();
+        this.autoNextTimeoutId = setTimeout(() => {
+          this.autoNextTimeoutId = null;
+          this.pickQuestion();
+        }, 700);
       }
 
       return;
     }
 
-    this.wrongCount++;
+    this.updateScore("wrong");
     this.updateStats();
 
     this.showResult(
       "wrong",
       "오답입니다",
-      `<div>입력한 문장과 정답이 다릅니다.</div>
+      `<div>핵심 단어 또는 문장 순서가 정답과 다릅니다.</div>
+       <div class="sub">대소문자, 공백, apostrophe, 따옴표, 기본 문장부호 차이는 자동으로 보정됩니다.</div>
        <div class="sub"><strong>내 답안</strong><br>${escapeHtml(userAnswer)}</div>
        <div class="answer-box"><strong>정답</strong><br>${this.currentQuestion.english}</div>`
     );
@@ -225,6 +322,8 @@ export class QuizApp {
 
   revealAnswer() {
     if (!this.currentQuestion) return;
+
+    this.future = [];
 
     this.showResult(
       "wrong",
@@ -234,8 +333,11 @@ export class QuizApp {
   }
 
   resetStats() {
+    this.clearPendingAutoNext();
     this.correctCount = 0;
     this.wrongCount = 0;
+    this.currentQuestionResult = null;
+    this.future = [];
 
     this.hideResult();
     this.updateStats();

@@ -16,7 +16,7 @@
 <img src="https://img.shields.io/badge/CSS-3-blue">
 <img src="https://img.shields.io/badge/JavaScript-ES6-yellow">
 <img src="https://img.shields.io/badge/Data-JSON-green">
-<img src="https://img.shields.io/badge/version-v1.3-brightgreen">
+<img src="https://img.shields.io/badge/version-v1.4-brightgreen">
 </p>
 
 ---
@@ -37,7 +37,7 @@
 
 # 🧠 About Project
 
-토익 스피킹 공부를 하다 보면 **만능 문장 50개**를 외워야 하는 경우가 많습니다.
+토익 스피킹 공부를 하다 보면 파트별 **만능 문장 패턴**을 반복해서 암기해야 하는 경우가 많습니다.
 
 하지만 단순히 읽는 방식은 기억에 오래 남지 않기 때문에
 
@@ -57,8 +57,8 @@
 다음 요소를 자동 보정하여 비교
 - 대소문자
 - 공백
-- 문장부호
-- apostrophe 차이
+- 기본 문장부호
+- apostrophe / 따옴표 차이
 
 ### 🎲 문제 출제 방식
 
@@ -71,9 +71,9 @@
 
 ### 🔀 Part 전환 지원
 - Part 2 *(데이터 준비 예정)*
-- Part 3
+- Part 3 *(50문장)*
 - Part 4 *(데이터 준비 예정)*
-- Part 5
+- Part 5 *(58문장)*
 
 ### 🏷 카테고리 표시 옵션
 - 문제 번호와 함께 카테고리 표시 가능
@@ -90,6 +90,11 @@
 - 정답 수
 - 오답 수
 - 정확도
+
+### ↩️ 문제 복원
+
+- 이전 문제로 이동 시 입력 답안 복원
+- 이전/다음 이동 시 결과 박스와 통계 상태 복원
 
 ### ⌨️ 빠른 입력 UX
 
@@ -140,7 +145,7 @@ toeic-speaking-quiz
 - **퀴즈 동작 구조**
 
 ```
-        sentences_partX.json
+       sentences_partX.json
                 ↓
          app.js (데이터 로드)
                 ↓
@@ -152,16 +157,31 @@ toeic-speaking-quiz
                 ↓
            사용자 답안 입력
                 ↓
-       normalizeText()로 정규화 비교
+    normalizeText()로 정규화 후 비교
                 ↓
              정답/오답 판정
                 ↓
-            통계 업데이트
+        상태 복원 / 통계 업데이트
 ```
 
 ---
 
 # 📦 Version History
+
+<details>
+<summary><strong>v1.4</strong></summary>
+
+### ✨ Improved
+- 같은 문제를 반복 채점해도 점수가 중복 누적되지 않도록 통계 로직 안정화
+- 자동 다음 문제와 수동 문제 이동이 충돌하지 않도록 흐름 정리
+- 이전 문제 이동 시 답안, 결과 박스, 통계 상태까지 함께 복원
+- Part 2 / Part 4 탭에 `준비 중` 상태 표시 추가
+- 문장부호 / 따옴표 정규화 규칙과 오답 피드백 문구 개선
+
+### 📝 Docs
+- README를 실제 데이터 구조와 v1.4 변경 사항 기준으로 업데이트
+
+</details>
 
 <details>
 <summary><strong>v1.3</strong></summary>
