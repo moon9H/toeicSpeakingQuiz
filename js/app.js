@@ -19,9 +19,13 @@ function normalizeDataset(sentences) {
   }));
 }
 
-function setActivePartButton(elements, part) {
-  elements.part3Btn.classList.toggle("active", part === "part3");
-  elements.part5Btn.classList.toggle("active", part === "part5");
+function setActivePartButton(elements, activePart) {
+  ["part2", "part3", "part4", "part5"].forEach((part) => {
+    const button = elements[`${part}Btn`];
+    if (button) {
+      button.classList.toggle("active", part === activePart);
+    }
+  });
 }
 
 function renderCountFilterOptions(elements, totalCount) {
@@ -39,35 +43,59 @@ function renderCountFilterOptions(elements, totalCount) {
 async function init() {
   const elements = getElements();
 
+  const partConfigs = {
+    part2: {
+      button: elements.part2Btn,
+      path: "./data/sentences_part2.json",
+    },
+    part3: {
+      button: elements.part3Btn,
+      path: "./data/sentences_part3.json",
+    },
+    part4: {
+      button: elements.part4Btn,
+      path: "./data/sentences_part4.json",
+    },
+    part5: {
+      button: elements.part5Btn,
+      path: "./data/sentences_part5.json",
+    },
+  };
+
   try {
-    const [part3Sentences, part5Sentences] = await Promise.all([
-      loadJson("./data/sentences.json"),
-      loadJson("./data/sentences2.json"),
-    ]);
+    const datasets = {};
+    const loadTargets = Object.entries(partConfigs);
 
-    const datasets = {
-      part3: normalizeDataset(part3Sentences),
-      part5: normalizeDataset(part5Sentences),
-    };
+    for (const [part, config] of loadTargets) {
+      try {
+        const data = await loadJson(config.path);
+        datasets[part] = normalizeDataset(data);
 
-    renderCountFilterOptions(elements, datasets.part3.length);
+        config.button.addEventListener("click", () => {
+          setActivePartButton(elements, part);
+          renderCountFilterOptions(elements, datasets[part].length);
+          app.setSentences(datasets[part]);
+        });
+      } catch (error) {
+        datasets[part] = null;
+        config.button.disabled = true;
+        config.button.title = "데이터 준비 중";
+      }
+    }
 
-    const app = new QuizApp(elements, datasets.part3);
+    const defaultPart = datasets.part3 ? "part3" : Object.keys(datasets).find((part) => datasets[part]);
+
+    if (!defaultPart) {
+      throw new Error("불러올 수 있는 문장 데이터가 없습니다.");
+    }
+
+    setActivePartButton(elements, defaultPart);
+    renderCountFilterOptions(elements, datasets[defaultPart].length);
+
+    const app = new QuizApp(elements, datasets[defaultPart]);
 
     app.bindEvents();
     app.applyFilter();
-
-    elements.part3Btn.addEventListener("click", () => {
-      setActivePartButton(elements, "part3");
-      renderCountFilterOptions(elements, datasets.part3.length);
-      app.setSentences(datasets.part3);
-    });
-
-    elements.part5Btn.addEventListener("click", () => {
-      setActivePartButton(elements, "part5");
-      renderCountFilterOptions(elements, datasets.part5.length);
-      app.setSentences(datasets.part5);
-    });
   } catch (error) {
     console.error(error);
     elements.questionTitleEl.textContent = "오류";
