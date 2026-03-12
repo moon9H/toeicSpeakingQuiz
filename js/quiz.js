@@ -42,7 +42,7 @@ export class QuizApp {
     this.elements.showCategoryEl.addEventListener("change", () => this.renderQuestion());
 
     this.elements.answerInputEl.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" && event.ctrlKey) {
+      if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         this.checkAnswer();
       }
