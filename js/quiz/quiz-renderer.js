@@ -13,7 +13,7 @@ export function renderQuestion(elements, state, options = {}) {
   elements.hintEl.classList.remove("empty-warning-sub");
 
   elements.questionTitleEl.textContent =
-    `${state.currentQuestion.no}.${categoryText}`;
+    `${state.currentQuestion.no}. ${categoryText}`.trim();
   elements.meaningEl.textContent = state.currentQuestion.korean;
   elements.hintEl.textContent =
     `총 ${state.filteredSentences.length}문장 범위에서 출제 중`;
@@ -34,15 +34,20 @@ export function renderQuestion(elements, state, options = {}) {
   elements.answerInputEl.focus();
 }
 
-export function updateStats(elements, state) {
+export function updateStats(elements, state, mode = "random") {
   const total = state.correctCount + state.wrongCount;
   const accuracy =
     total === 0 ? 0 : Math.round((state.correctCount / total) * 100);
+  const progress = getProgressState(state, mode);
 
-  elements.progressPillEl.textContent =
-    `현재 ${state.currentQuestion ? state.currentQuestion.no : "-"}번`;
+  elements.progressPillEl.innerHTML = `
+    <span class="progress-pill-label">${progress.label}</span>
+    <span class="progress-pill-track" aria-hidden="true">
+      <span class="progress-pill-fill" style="width: ${progress.percent}%"></span>
+    </span>
+  `;
   elements.scorePillEl.textContent =
-    `정답 ${state.correctCount} · 오답 ${state.wrongCount}`;
+    `정답 ${state.correctCount} / 오답 ${state.wrongCount}`;
   elements.accuracyPillEl.textContent = `정확도 ${accuracy}%`;
 }
 
@@ -79,17 +84,20 @@ function renderEmptyQuestion(elements, state) {
   const isWrongMode = state.reviewMode === "wrong";
 
   elements.questionTitleEl.textContent = isWrongMode
-    ? "오답 노트 비어 있음"
+    ? "오답 노트가 비어 있음"
     : "문제가 없습니다";
   elements.questionTitleEl.classList.toggle("empty-warning", isWrongMode);
+
   elements.meaningEl.textContent = isWrongMode
     ? "아직 틀린 문제가 없습니다. 문제를 틀리면 여기에서 다시 볼 수 있습니다."
     : "현재 조건에 맞는 문제가 없습니다.";
   elements.meaningEl.classList.toggle("empty-warning", isWrongMode);
+
   elements.hintEl.textContent = isWrongMode
     ? `오답으로 기록된 문제 ${state.wrongQuestionNos.length}개`
     : "출제 범위를 다시 선택해 보세요.";
   elements.hintEl.classList.toggle("empty-warning-sub", isWrongMode);
+
   elements.answerInputEl.value = "";
   elements.answerInputEl.disabled = true;
   elements.checkBtn.disabled = true;
@@ -98,4 +106,28 @@ function renderEmptyQuestion(elements, state) {
   elements.nextBtn.disabled = true;
   elements.nextBtn.textContent = "다음 문제";
   hideResult(elements);
+}
+
+function getProgressState(state, mode) {
+  const totalCount = state.filteredSentences.length;
+
+  if (!state.currentQuestion || totalCount === 0) {
+    return {
+      label: `진행 0 / ${totalCount}`,
+      percent: 0,
+    };
+  }
+
+  let currentOrder;
+
+  if (mode === "sequential") {
+    currentOrder = ((state.currentIndex - 1 + totalCount) % totalCount) + 1;
+  } else {
+    currentOrder = Math.max(1, totalCount - state.randomQueue.length);
+  }
+
+  return {
+    label: `진행 ${currentOrder} / ${totalCount}`,
+    percent: Math.round((currentOrder / totalCount) * 100),
+  };
 }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>토익 스피킹 만능문장 퀴즈</title>
+  <title>토익 스피킹 만능 문장 퀴즈</title>
 
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
@@ -16,25 +16,34 @@
       <header class="header">
         <div class="header-top">
           <div class="header-text">
-            <h1>토익 스피킹 만능문장 퀴즈</h1>
+            <h1>토익 스피킹 만능 문장 퀴즈</h1>
             <p>
               한글 뜻을 보고 영어 문장을 직접 입력해 보세요.
-              대소문자, 스마트 따옴표, 문장부호, 여분 공백 차이는 자동으로 보정합니다.
+              대소문자, 따옴표, 문장부호, 여분 공백 차이는 자동으로 보정합니다.
             </p>
+            <a
+              class="header-reference"
+              href="https://www.rabbitlearn.com/main/index.jsp"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Rabbit Learn reference"
+              title="Rabbit Learn"
+            >
+              🐇
+            </a>
           </div>
           <div class="part-tabs">
-            <button class="part-tab" id="part2Btn">Part 2</button>
-            <button class="part-tab active" id="part3Btn">Part 3</button>
-            <button class="part-tab" id="part4Btn">Part 4</button>
-            <button class="part-tab" id="part5Btn">Part 5</button>
+            <button type="button" class="part-tab" id="part2Btn">Part 2</button>
+            <button type="button" class="part-tab" id="part3Btn">Part 3</button>
+            <button type="button" class="part-tab" id="part4Btn">Part 4</button>
+            <button type="button" class="part-tab" id="part5Btn">Part 5</button>
           </div>
         </div>
       </header>
       <main class="body">
         <section class="topbar">
           <div class="pill-group">
-            <div class="pill" id="progressPill">현재 1번</div>
-            <div class="pill" id="scorePill">정답 0 · 오답 0</div>
+            <div class="pill" id="scorePill">정답 0 / 오답 0</div>
             <div class="pill" id="accuracyPill">정확도 0%</div>
           </div>
           <div class="topbar-actions">
@@ -77,6 +86,10 @@
           </div>
         </section>
 
+        <section class="progress-section">
+          <div class="pill progress-pill" id="progressPill"></div>
+        </section>
+
         <section class="card question-card">
           <div class="label">현재 문제</div>
           <div class="question-title" id="questionTitle">1. 스트레스</div>
@@ -86,7 +99,7 @@
 
         <section class="card answer-card">
           <div class="label">영어 문장 입력</div>
-          <textarea id="answerInput" placeholder="영어 문장을 입력하세요 (Enter = 채점 / Shift+Enter = 줄바꿈)"></textarea>
+          <textarea id="answerInput" placeholder="영어 문장을 입력하세요. (Enter = 채점 / Shift+Enter = 줄바꿈)"></textarea>
 
           <div class="buttons">
             <button class="primary" id="checkBtn">채점하기</button>
@@ -101,7 +114,7 @@
           </div>
 
           <div class="footer-note">
-             (Enter = 채점 / Shift+Enter = 줄바꿈)
+            (Enter = 채점 / Shift+Enter = 줄바꿈)
           </div>
         </section>
       </main>

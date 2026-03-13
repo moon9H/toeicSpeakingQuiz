@@ -21,7 +21,8 @@ async function init() {
   const partConfigs = getPartConfigs(elements);
   const savedSession = loadLearningSession();
   const controlStateRef = {
-    standardMode: savedSession?.standardMode ?? savedSession?.mode ?? elements.modeEl.value,
+    standardMode:
+      savedSession?.standardMode ?? savedSession?.mode ?? elements.modeEl.value,
     standardCountFilter:
       savedSession?.standardCountFilter ?? savedSession?.countFilter ?? "all",
   };
@@ -29,7 +30,7 @@ async function init() {
   try {
     const datasets = await loadPartDatasets(
       partConfigs,
-      (part, config, dataset) => {
+      (part, config) => {
         setPartButtonState(config.button, {
           isReady: true,
           title: `${config.button.textContent} 문장 학습 시작`,
@@ -38,6 +39,7 @@ async function init() {
       (part, config) => {
         setPartButtonState(config.button, {
           isReady: false,
+          status: "준비 중",
           title: `${config.button.textContent} 데이터 준비 중`,
         });
       }
@@ -102,7 +104,7 @@ async function init() {
     console.error(error);
     elements.questionTitleEl.textContent = "오류";
     elements.meaningEl.textContent = "문장 데이터를 불러오지 못했습니다.";
-    elements.hintEl.textContent = "localhost 환경에서 실행했는지 확인해 주세요.";
+    elements.hintEl.textContent = "localhost 환경에서 실행 중인지 확인해 주세요.";
   }
 }
 
@@ -130,7 +132,12 @@ function bindPartButtons(
         controlStateRef
       );
       saveLearningSession(
-        buildLearningSession(part, elements, app.getPersistedState(), controlStateRef)
+        buildLearningSession(
+          part,
+          elements,
+          app.getPersistedState(),
+          controlStateRef
+        )
       );
     });
   }
@@ -165,7 +172,6 @@ function applySessionControls(elements, savedSession) {
 }
 
 function restoreLearningSession(elements, datasets, app, activePart, savedSession) {
-  const dataset = datasets[activePart];
   const desiredFilter = savedSession.countFilter;
   const hasDesiredFilter = Array.from(elements.countFilterEl.options).some(
     (option) => option.value === desiredFilter
