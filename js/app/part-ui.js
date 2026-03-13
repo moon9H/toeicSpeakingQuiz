@@ -11,12 +11,12 @@ export function setActivePartButton(elements, activePart) {
   });
 }
 
-export function setPartButtonState(button, { isReady, title }) {
+export function setPartButtonState(button, { isReady, status = "", title }) {
   if (!button) return;
 
   button.disabled = !isReady;
   button.classList.toggle("is-coming-soon", !isReady);
-  button.dataset.status = isReady ? "" : "준비 중";
+  button.dataset.status = status;
   button.title = title;
   button.setAttribute("aria-disabled", String(!isReady));
 }
@@ -25,9 +25,7 @@ export function renderCountFilterOptions(elements, totalCount) {
   const options = buildRangeOptions(totalCount);
 
   elements.countFilterEl.innerHTML = options
-    .map(
-      (option) => `<option value="${option.value}">${option.label}</option>`
-    )
+    .map((option) => `<option value="${option.value}">${option.label}</option>`)
     .join("");
 
   elements.countFilterEl.value = "all";
