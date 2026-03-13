@@ -38,8 +38,14 @@ export function updateStats(elements, state, mode = "random") {
   const total = state.correctCount + state.wrongCount;
   const accuracy =
     total === 0 ? 0 : Math.round((state.correctCount / total) * 100);
+  const progress = getProgressState(state, mode);
 
-  elements.progressPillEl.textContent = getProgressText(state, mode);
+  elements.progressPillEl.innerHTML = `
+    <span class="progress-pill-label">${progress.label}</span>
+    <span class="progress-pill-track" aria-hidden="true">
+      <span class="progress-pill-fill" style="width: ${progress.percent}%"></span>
+    </span>
+  `;
   elements.scorePillEl.textContent =
     `정답 ${state.correctCount} / 오답 ${state.wrongCount}`;
   elements.accuracyPillEl.textContent = `정확도 ${accuracy}%`;
@@ -102,18 +108,26 @@ function renderEmptyQuestion(elements, state) {
   hideResult(elements);
 }
 
-function getProgressText(state, mode) {
+function getProgressState(state, mode) {
   const totalCount = state.filteredSentences.length;
 
   if (!state.currentQuestion || totalCount === 0) {
-    return `진행 0 / ${totalCount}`;
+    return {
+      label: `진행 0 / ${totalCount}`,
+      percent: 0,
+    };
   }
+
+  let currentOrder;
 
   if (mode === "sequential") {
-    const currentOrder = ((state.currentIndex - 1 + totalCount) % totalCount) + 1;
-    return `진행 ${currentOrder} / ${totalCount}`;
+    currentOrder = ((state.currentIndex - 1 + totalCount) % totalCount) + 1;
+  } else {
+    currentOrder = Math.max(1, totalCount - state.randomQueue.length);
   }
 
-  const currentOrder = Math.max(1, totalCount - state.randomQueue.length);
-  return `진행 ${currentOrder} / ${totalCount}`;
+  return {
+    label: `진행 ${currentOrder} / ${totalCount}`,
+    percent: Math.round((currentOrder / totalCount) * 100),
+  };
 }

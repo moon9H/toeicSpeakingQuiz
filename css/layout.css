@@ -68,6 +68,11 @@ body {
   margin-bottom: 18px;
 }
 
+.progress-section {
+  margin-bottom: 18px;
+}
+
+
 .buttons {
   display: flex;
   gap: 12px;
