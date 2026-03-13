@@ -79,7 +79,7 @@ export class QuizApp {
       this.elements.modeEl.value = "random";
     }
     this.pickQuestion(false);
-    updateStats(this.elements, this.state);
+    updateStats(this.elements, this.state, this.elements.modeEl.value);
     this.notifyStateChange();
   }
 
@@ -89,7 +89,7 @@ export class QuizApp {
     if (this.state.filteredSentences.length === 0) {
       this.state.currentQuestion = null;
       this.renderQuestion();
-      updateStats(this.elements, this.state);
+      updateStats(this.elements, this.state, this.elements.modeEl.value);
       this.notifyStateChange();
       return;
     }
@@ -104,7 +104,7 @@ export class QuizApp {
 
     pickNextQuestion(this.state, this.elements.modeEl.value);
     this.renderQuestion();
-    updateStats(this.elements, this.state);
+    updateStats(this.elements, this.state, this.elements.modeEl.value);
     this.notifyStateChange();
   }
 
@@ -152,7 +152,7 @@ export class QuizApp {
     restoreSnapshot(this.state, state);
     this.renderQuestion(false);
     restoreViewState(this.elements, state.viewState);
-    updateStats(this.elements, this.state);
+    updateStats(this.elements, this.state, this.elements.modeEl.value);
   }
 
   renderQuestion(resetView = true) {
@@ -194,7 +194,7 @@ export class QuizApp {
 
     if (comparison.isMatch) {
       this.updateScore("correct");
-      updateStats(this.elements, this.state);
+      updateStats(this.elements, this.state, this.elements.modeEl.value);
 
       this.showResult(
         "correct",
@@ -217,7 +217,7 @@ export class QuizApp {
 
     this.updateScore("wrong");
     markQuestionWrong(this.state, this.state.currentQuestion.no);
-    updateStats(this.elements, this.state);
+    updateStats(this.elements, this.state, this.elements.modeEl.value);
 
     this.showResult(
       "wrong",
@@ -274,7 +274,7 @@ export class QuizApp {
 
     this.renderQuestion(false);
     restoreViewState(this.elements, savedState.viewState ?? captureViewState(this.elements));
-    updateStats(this.elements, this.state);
+    updateStats(this.elements, this.state, this.elements.modeEl.value);
     this.notifyStateChange();
     return true;
   }
